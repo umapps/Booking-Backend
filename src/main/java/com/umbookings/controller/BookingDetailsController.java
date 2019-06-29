@@ -1,7 +1,7 @@
-package com.example.umbookings.controller;
+package com.umbookings.controller;
 
-import com.example.umbookings.model.BookingDetails;
-import com.example.umbookings.service.BookingDetailService;
+import com.umbookings.model.BookingDetails;
+import com.umbookings.service.BookingDetailService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

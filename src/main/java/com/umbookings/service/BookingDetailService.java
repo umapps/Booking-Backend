@@ -1,4 +1,4 @@
-package com.example.umbookings.service;
+package com.umbookings.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.umbookings.exception.ResourceNotFoundException;
-import com.example.umbookings.model.BookingDetails;
-import com.example.umbookings.repository.BookingDetailsRepository;
+import com.umbookings.repository.BookingDetailsRepository;
+import com.umbookings.exception.ResourceNotFoundException;
+import com.umbookings.model.BookingDetails;
 
 @Service
 public class BookingDetailService {
@@ -42,7 +42,6 @@ public class BookingDetailService {
 	{
 		BookingDetails currentBooking = bookingDetailsRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Booking id not found - " + id));
-
 		currentBooking.setBookingDate(bookingDetail.getBookingDate());
 		currentBooking.setMobileNbr(bookingDetail.getMobileNbr());
 		currentBooking.setEmailIdentifier(bookingDetail.getEmailIdentifier());

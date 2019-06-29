@@ -1,4 +1,4 @@
-package com.example.umbookings.enums;
+package com.umbookings.enums;
 
 public enum BookingStatus {
 

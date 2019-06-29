@@ -1,4 +1,4 @@
-package com.example.umbookings.exception;
+package com.umbookings.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

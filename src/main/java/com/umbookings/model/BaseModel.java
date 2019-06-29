@@ -1,4 +1,4 @@
-package com.example.umbookings.model;
+package com.umbookings.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
