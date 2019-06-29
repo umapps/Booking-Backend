@@ -1,4 +1,4 @@
-package com.example.umbookings;
+package com.umbookings;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

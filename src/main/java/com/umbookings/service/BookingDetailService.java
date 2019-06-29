@@ -30,7 +30,7 @@ public class BookingDetailService {
 	
 	public BookingDetails save(BookingDetails bookingDetails)
 	{
-		LOG.info("Booking created successfully for Mobile number - ", bookingDetails.getMobileNbr());
+		LOG.info("Booking created successfully for Mobile number - {} ", bookingDetails.getMobileNbr());
 		return bookingDetailsRepository.save(bookingDetails);
 	}
 	
