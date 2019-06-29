@@ -23,4 +23,6 @@
 /dist/
 /nbdist/
 /.nb-gradle/
-/logs
+/logs        
+/bin
+logs        /
