@@ -10,7 +10,10 @@ import com.umbookings.enums.BookingStatus;
 import com.umbookings.enums.BookingType;
 
 import lombok.*;
-
+/**
+ * @author Shrikar Kalagi
+ *
+ */
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity

@@ -1,3 +1,4 @@
+
 package com.umbookings.service;
 
 import org.slf4j.Logger;
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Service;
 import com.umbookings.repository.BookingDetailsRepository;
 import com.umbookings.exception.ResourceNotFoundException;
 import com.umbookings.model.BookingDetails;
-
+/**
+ * @author Shrikar Kalagi
+ *
+ */
 @Service
 public class BookingDetailService {
 	
@@ -26,7 +30,7 @@ public class BookingDetailService {
 	
 	public BookingDetails save(BookingDetails bookingDetails)
 	{
-		LOG.info("Booking id {} created successfully", bookingDetails.getId());
+		LOG.info("Booking created successfully for Mobile number - ", bookingDetails.getMobileNbr());
 		return bookingDetailsRepository.save(bookingDetails);
 	}
 	

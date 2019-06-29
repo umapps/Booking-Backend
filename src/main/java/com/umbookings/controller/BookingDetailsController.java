@@ -9,7 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-
+/**
+ * @author Shrikar Kalagi
+ *
+ */
 @RestController
 @CrossOrigin
 public class BookingDetailsController {
