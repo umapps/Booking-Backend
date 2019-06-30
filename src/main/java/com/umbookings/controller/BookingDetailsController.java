@@ -36,18 +36,18 @@ public class BookingDetailsController {
     }
     
     @PostMapping("/booking")
-    public BookingDetails createQuestion(@Valid @RequestBody BookingDetails bookingDetails) {
+    public BookingDetails createBooking(@Valid @RequestBody BookingDetails bookingDetails) {
         return bookingDetailService.save(bookingDetails);
     }
 
   @PutMapping("/booking/{bookingId}")
-  public BookingDetails updateQuestion(@PathVariable Long bookingId,
+  public BookingDetails updateBooking(@PathVariable Long bookingId,
                                  @Valid @RequestBody BookingDetails bookingDetail) {
 
 	  return bookingDetailService.update(bookingDetail, bookingId);
   }
     @DeleteMapping("/booking/{bookingId}")
-    public ResponseEntity<?> deleteQuestion(@PathVariable Long bookingId) {
+    public ResponseEntity<?> deleteBooking(@PathVariable Long bookingId) {
 
     	bookingDetailService.delete(bookingId);
     	return ResponseEntity.ok().build();
