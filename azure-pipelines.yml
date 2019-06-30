@@ -22,17 +22,19 @@ steps:
     goals: 'clean package'
     options: '-Dmaven.test.skip=true'
 
+- publish: $(System.DefaultWorkingDirectory)/target/umbookings-backend-0.0.1-SNAPSHOT.jar
+  artifact: umbookings-backend-0.0.1-SNAPSHOT.jar
+
 - task: AmazonWebServices.aws-vsts-tools.S3Upload.S3Upload@1
   displayName: 'S3Upload'
   inputs:
     awsCredentials: aws
     regionName: 'us-east-1'
-    bucketName: umbookingbucket
+    bucketName: artifactBucket
     sourceFolder: '$(System.DefaultWorkingDirectory)/target/umbookings-backend-0.0.1-SNAPSHOT.jar'
     filesAcl: 'public-read-write'
     createBucket: true
 
 
-- publish: $(System.DefaultWorkingDirectory)/target/umbookings-backend-0.0.1-SNAPSHOT.jar
-  artifact: umbookings-backend-0.0.1-SNAPSHOT.jar
+
 
