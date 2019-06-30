@@ -29,19 +29,10 @@ steps:
   displayName: 'S3Upload'
   inputs:
     awsCredentials: aws
-    regionName: 'us-east-1'
     bucketName: 'artifactbucket'
     sourceFolder: '$(System.DefaultWorkingDirectory)/target/umbookings-backend-0.0.1-SNAPSHOT.jar'
     filesAcl: 'public-read-write'
     createBucket: true
-
-- bash: |
-    # Write your commands here
-    ssh -i "UMBookings.pem" ubuntu@ec2-3-90-67-182.compute-1.amazonaws.com
-    wget https://umbookingbucket.s3.amazonaws.com/umbookings-backend-0.0.1-SNAPSHOT.jar
-
-    # Use the environment variables input below to pass secret variables to this script
-  displayName: 'Bash Script'
 
 
 
