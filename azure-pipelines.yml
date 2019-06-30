@@ -28,6 +28,7 @@ steps:
     awsCredentials: aws
     regionName: 'us-east-1'
     bucketName: umbookingbucket
+    sourceFolder: '$(System.DefaultWorkingDirectory)/_umapps.Booking-Backend-jar/umbookings-backend-0.0.1-SNAPSHOT.jar'
     filesAcl: 'public-read-write'
     createBucket: true
 
