@@ -30,7 +30,7 @@ public class BookingDetailService {
 	
 	public BookingDetails save(BookingDetails bookingDetails)
 	{
-		LOG.info("Booking created successfully for Mobile number - {} ", bookingDetails.getMobileNbr());
+		LOG.info("Booking created successfully for Mobile number - {} ", bookingDetails.getMobileNumber());
 		return bookingDetailsRepository.save(bookingDetails);
 	}
 	
@@ -47,7 +47,7 @@ public class BookingDetailService {
 		BookingDetails currentBooking = bookingDetailsRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Booking id not found - " + id));
 		currentBooking.setBookingDate(bookingDetail.getBookingDate());
-		currentBooking.setMobileNbr(bookingDetail.getMobileNbr());
+		currentBooking.setMobileNumber(bookingDetail.getMobileNumber());
 		currentBooking.setEmailIdentifier(bookingDetail.getEmailIdentifier());
 		currentBooking.setPersonCount(bookingDetail.getPersonCount());
 		currentBooking.setBookingType(bookingDetail.getBookingType());

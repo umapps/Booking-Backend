@@ -34,7 +34,7 @@ public class BookingDetails extends BaseModel {
 	@NotBlank
     @Column(name = "mobile_number")
     @Size(min = 10, max = 10)
-    private String mobileNbr;
+    private String mobileNumber;
 	
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "booking_date", nullable = false)

@@ -1,7 +1,9 @@
 package com.umbookings.controller;
 
 import com.umbookings.model.BookingDetails;
+
 import com.umbookings.service.BookingDetailService;
+import com.umbookings.service.NotificationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +21,10 @@ public class BookingDetailsController {
     
     @Autowired
     private BookingDetailService bookingDetailService;
-
+	
+	@Autowired
+	private NotificationService notificationService;
+	
     @GetMapping("/booking")
     public Page<BookingDetails> getBookings(Pageable pageable) {
         return bookingDetailService.findAll(pageable);
@@ -46,5 +51,17 @@ public class BookingDetailsController {
 
     	bookingDetailService.delete(bookingId);
     	return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/sendEmail/{emailId}")
+    public String sendEmail(@PathVariable String emailId) {
+    	
+    	return notificationService.sendEmail(emailId);
+    }
+    
+    @GetMapping("/sendSMS/{mobileNumber}")
+    public String sendSMS(@PathVariable String mobileNumber) {
+    	
+    	 return notificationService.sendSMS(mobileNumber);
     }
 }
