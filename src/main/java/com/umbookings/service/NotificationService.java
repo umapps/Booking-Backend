@@ -78,6 +78,5 @@ public class NotificationService {
 			LOG.info("SMS sending failed for mobile number {} with error message {} ", mobileNumber, e);
 			return e.toString();
 		}
-}
-
+	}
 }
