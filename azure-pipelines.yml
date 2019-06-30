@@ -23,13 +23,13 @@ steps:
     options: '-Dmaven.test.skip=true'
 
 - task: AmazonWebServices.aws-vsts-tools.S3Upload.S3Upload@1
-    displayName: 'S3 Upload'
-    inputs:
-      awsCredentials: aws
-      regionName: 'us-east-1'
-      bucketName: umbookingbucket
-      filesAcl: 'public-read-write'
-      createBucket: true
+  displayName: 'S3Upload'
+  inputs:
+    awsCredentials: aws
+    regionName: 'us-east-1'
+    bucketName: umbookingbucket
+    filesAcl: 'public-read-write'
+    createBucket: true
 
 
 - publish: $(System.DefaultWorkingDirectory)/target/umbookings-backend-0.0.1-SNAPSHOT.jar
