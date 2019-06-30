@@ -32,7 +32,7 @@ steps:
     regionName: 'us-east-1'
     bucketName: 'artifactbucket-umbooking'
     sourceFolder: '$(System.DefaultWorkingDirectory)/target'
-    globExpressions: '*.jar*'
+    globExpressions: '*.jar'
     filesAcl: 'public-read-write'
     createBucket: true
 
