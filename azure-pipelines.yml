@@ -31,7 +31,7 @@ steps:
     awsCredentials: aws
     regionName: 'us-east-1'
     bucketName: 'artifactbucket-umbooking'
-    sourceFolder: '$(System.DefaultWorkingDirectory)/target'
+    sourceFolder: '$(System.DefaultWorkingDirectory)/target/umbookings-backend-0.0.1-SNAPSHOT.jar'
     filesAcl: 'public-read-write'
     createBucket: true
 
