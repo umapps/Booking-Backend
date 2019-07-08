@@ -56,7 +56,7 @@ public class NotificationService {
 	public String sendSMS(String mobileNumber) {
 		try {
 	    AWSCredentials awsCredentials = new BasicAWSCredentials(awsAccessKey, awsSecretAccessKey);
-        AmazonSNSClient snsClient = new AmazonSNSClient(awsCredentials);
+        AmazonSNSClient snsClient = new AmazonSNSClient();
         snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
         String message = "Test Message from UM Apps";
         String phoneNumber = "+91"+mobileNumber;
