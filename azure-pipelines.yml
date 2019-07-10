@@ -25,7 +25,7 @@ steps:
   displayName: 'AWS Deploy'
   inputs:
     awsCredentials: aws
-    awsCommand: 'aws deploy create-deployment \     --application-name umbookings-backend \     --deployment-group-name umbookings-backend-deployment-group \     --github-location repository=umapps/Booking-Backend,commitId=ddd2f907c58e7f902674315aa6dee76ac3b6bf9b'
+    awsCommand: 'aws deploy create-deployment --application-name umbookings-backend --deployment-group-name umbookings-backend-deployment-group --github-location repository=umapps/Booking-Backend,commitId=ddd2f907c58e7f902674315aa6dee76ac3b6bf9b'
     failOnStandardError: false
 
 - publish: $(System.DefaultWorkingDirectory)/target/umbookings-backend-0.0.1-SNAPSHOT.jar
