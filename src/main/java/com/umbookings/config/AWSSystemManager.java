@@ -38,7 +38,7 @@ public class AWSSystemManager {
 	@Primary
 	public DataSource dataSource() {
 		//if (!environment.getProperty("spring.profiles.active").equals("development")) {
-			mapEnvironmentProperties();
+			//mapEnvironmentProperties();
 		//}
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
@@ -52,10 +52,10 @@ public class AWSSystemManager {
 	private AWSSimpleSystemsManagement awsClient() {
 		AWSSimpleSystemsManagement awsClient = null;
 	//	if ((environment.getProperty("spring.profiles.active").equals("development"))) {
-//			BasicAWSCredentials awsCreds = new BasicAWSCredentials(environment.getProperty("aws.access.key.id"),
-//					environment.getProperty("aws.secret.access.key"));
-//			awsClient = AWSSimpleSystemsManagementClientBuilder.standard()
-//					.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).withRegion(Regions.US_EAST_1).build();
+			BasicAWSCredentials awsCreds = new BasicAWSCredentials(environment.getProperty("aws.access.key.id"),
+					environment.getProperty("aws.secret.access.key"));
+			awsClient = AWSSimpleSystemsManagementClientBuilder.standard()
+					.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).withRegion(Regions.US_EAST_1).build();
 //		} else {
 			awsClient = AWSSimpleSystemsManagementClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
 //		}
