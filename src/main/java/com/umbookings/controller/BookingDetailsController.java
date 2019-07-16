@@ -58,13 +58,13 @@ public class BookingDetailsController {
     @GetMapping("/sendEmail/{emailId}")
     public String sendEmail(@PathVariable String emailId) {
     	
-    	return notificationService.sendEmail(emailId, 0000);
+    	return notificationService.sendEmail(emailId, "Body", "Subject");
     }
     
     @GetMapping("/sendSMS/{mobileNumber}")
     public String sendSMS(@PathVariable String mobileNumber) {
     	
-    	 return notificationService.sendSMS(mobileNumber, 0000);
+    	 return notificationService.sendSMS(mobileNumber, "OTP 0000");
     }
     
     @GetMapping("/sendOTP")

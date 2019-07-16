@@ -1,5 +1,8 @@
 package com.umbookings.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -13,6 +16,7 @@ import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
 import com.umbookings.config.AWSEmailConfig;
@@ -31,7 +35,7 @@ public class NotificationService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
 
-	public String sendEmail(String emailId, int otp) {
+	public String sendEmail(String emailId, String emailBody, String emailSubject) {
 		try {
 			//Using AWS Simple Email Service
 			AmazonSimpleEmailService emailClient = AWSEmailConfig.getAWSCredentials(environment);
@@ -41,10 +45,10 @@ public class NotificationService {
 							new Message()
 									.withBody(new Body()
 											.withHtml(new Content().withCharset("UTF-8")
-													.withData("OTP for booking is "+ otp))
-											.withText(new Content().withCharset("UTF-8").withData("Test")))
+													.withData(emailBody))
+											.withText(new Content().withCharset("UTF-8").withData("UMAPPS")))
 									.withSubject(
-											new Content().withCharset("UTF-8").withData("OTP for booking is "+ otp)))
+											new Content().withCharset("UTF-8").withData(emailSubject)))
 					.withSource("shrikarvk@gmail.com");
 			emailClient.sendEmail(request);
 			LOG.info("Email sent successfully to {}", emailId);
@@ -55,15 +59,22 @@ public class NotificationService {
 		}
 	}
 
-	public String sendSMS(String mobileNumber, int otp) {
+	public String sendSMS(String mobileNumber, String text) {
 		AmazonSNSClient snsClient = null;
 		try {
 			// Using AWS Simple Notification Service
 			snsClient = AWSSMSConfig.getAWSSMSConfig(environment);
-			String message = "OTP for booking is "+otp;
 			String phoneNumber = "+91" + mobileNumber;
+			Map<String, MessageAttributeValue> smsAttributes =
+			        new HashMap<>();
+			smsAttributes.put("AWS.SNS.SMS.SenderID", new MessageAttributeValue()
+			        .withStringValue("UMAPPS") //The sender ID shown on the device.
+			        .withDataType("String"));
+			smsAttributes.put("AWS.SNS.SMS.SMSType", new MessageAttributeValue()
+			        .withStringValue("Transactional") //Sets the type to Transactional.
+			        .withDataType("String"));
 			PublishResult result = snsClient
-					.publish(new PublishRequest().withMessage(message).withPhoneNumber(phoneNumber));
+					.publish(new PublishRequest().withMessage(text).withPhoneNumber(phoneNumber).withMessageAttributes(smsAttributes));
 			LOG.info("SMS sent successfully to {} with message id {}", mobileNumber, result);
 			return "SMS sent successfully to "+ mobileNumber +" with message id " +result;
 		} catch (Exception e) {

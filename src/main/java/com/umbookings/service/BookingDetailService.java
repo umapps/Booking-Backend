@@ -76,9 +76,15 @@ public class BookingDetailService {
 	public String sendOTP(String mobileNumber, String emailId) {
 		Random rand = new Random(); 
 		int otp = rand.nextInt(9999); 
+		if (otp < 1000)
+		{
+			otp = otp + 1000;
+		}
+		String smsString = "UMAPPS > OTP for booking is "+otp;
+		String emailString = "UMAPPS > OTP for booking is "+otp;
+		notificationService.sendEmail(emailId, emailString, emailString);
+		notificationService.sendSMS(mobileNumber, smsString);
 		template.opsForHash().put("otpList", mobileNumber, otp);
-		notificationService.sendEmail(emailId, otp);
-		notificationService.sendSMS(mobileNumber, otp);		
 		return null;
 	}
 
