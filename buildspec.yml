@@ -10,8 +10,8 @@ phases:
     - apt-get install -y maven
   build:
     commands:
-    - echo building the justiceleague-tracker
-    - mvn install
+    - echo building the UMBookings-backend JAR
+    - mvn package -Dmaven.test.skip=true
 artifacts:
   files:
   - target/*.jar
