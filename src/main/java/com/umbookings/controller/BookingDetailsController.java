@@ -1,5 +1,6 @@
 package com.umbookings.controller;
 
+import com.umbookings.dto.request.BookingDetailsDTO;
 import com.umbookings.model.BookingDetails;
 
 import com.umbookings.service.BookingDetailService;
@@ -36,8 +37,9 @@ public class BookingDetailsController {
     }
     
     @PostMapping("/booking")
-    public BookingDetails createBooking(@Valid @RequestBody BookingDetails bookingDetails) {
-        return bookingDetailService.save(bookingDetails);
+    public BookingDetailsDTO createBooking(@Valid @RequestBody BookingDetailsDTO bookingDetails) {
+    	
+        return bookingDetailService.saveBooking(bookingDetails);
     }
 
   @PutMapping("/booking/{bookingId}")
@@ -56,12 +58,18 @@ public class BookingDetailsController {
     @GetMapping("/sendEmail/{emailId}")
     public String sendEmail(@PathVariable String emailId) {
     	
-    	return notificationService.sendEmail(emailId);
+    	return notificationService.sendEmail(emailId, 0000);
     }
     
     @GetMapping("/sendSMS/{mobileNumber}")
     public String sendSMS(@PathVariable String mobileNumber) {
     	
-    	 return notificationService.sendSMS(mobileNumber);
+    	 return notificationService.sendSMS(mobileNumber, 0000);
+    }
+    
+    @GetMapping("/sendOTP")
+    public String sendSMS(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) {
+    	
+    	 return bookingDetailService.sendOTP(mobileNumber, emailId);
     }
 }

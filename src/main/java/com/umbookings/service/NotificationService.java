@@ -31,7 +31,7 @@ public class NotificationService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
 
-	public String sendEmail(String emailId) {
+	public String sendEmail(String emailId, int otp) {
 		try {
 			//Using AWS Simple Email Service
 			AmazonSimpleEmailService emailClient = AWSEmailConfig.getAWSCredentials(environment);
@@ -41,10 +41,10 @@ public class NotificationService {
 							new Message()
 									.withBody(new Body()
 											.withHtml(new Content().withCharset("UTF-8")
-													.withData("Test email from UM-Apps"))
+													.withData("OTP for booking is "+ otp))
 											.withText(new Content().withCharset("UTF-8").withData("Test")))
 									.withSubject(
-											new Content().withCharset("UTF-8").withData("Test email from UM-Apps")))
+											new Content().withCharset("UTF-8").withData("OTP for booking is "+ otp)))
 					.withSource("shrikarvk@gmail.com");
 			emailClient.sendEmail(request);
 			LOG.info("Email sent successfully to {}", emailId);
@@ -55,12 +55,12 @@ public class NotificationService {
 		}
 	}
 
-	public String sendSMS(String mobileNumber) {
+	public String sendSMS(String mobileNumber, int otp) {
 		AmazonSNSClient snsClient = null;
 		try {
 			// Using AWS Simple Notification Service
 			snsClient = AWSSMSConfig.getAWSSMSConfig(environment);
-			String message = "Test Message from UM Apps";
+			String message = "OTP for booking is "+otp;
 			String phoneNumber = "+91" + mobileNumber;
 			PublishResult result = snsClient
 					.publish(new PublishRequest().withMessage(message).withPhoneNumber(phoneNumber));

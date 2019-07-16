@@ -1,14 +1,19 @@
 
 package com.umbookings.service;
 
+import java.util.Random;
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.umbookings.repository.BookingDetailsRepository;
+import com.umbookings.dto.request.BookingDetailsDTO;
 import com.umbookings.exception.ResourceNotFoundException;
 import com.umbookings.model.BookingDetails;
 /**
@@ -22,6 +27,12 @@ public class BookingDetailService {
 
 	@Autowired
 	private BookingDetailsRepository bookingDetailsRepository;
+	
+	@Autowired
+	private NotificationService notificationService;
+	
+	@Autowired
+	private RedisTemplate<String, Object> template;
 	
 	public Page<BookingDetails> findAll(Pageable pageable)
 	{
@@ -60,6 +71,30 @@ public class BookingDetailService {
 	public BookingDetails findById(Long bookingId) {
 		return bookingDetailsRepository.findById(bookingId)
 				.orElseThrow(() -> new ResourceNotFoundException("Booking id not found - " + bookingId));
+	}
+
+	public String sendOTP(String mobileNumber, String emailId) {
+		Random rand = new Random(); 
+		int otp = rand.nextInt(9999); 
+		template.opsForHash().put("otpList", mobileNumber, otp);
+		notificationService.sendEmail(emailId, otp);
+		notificationService.sendSMS(mobileNumber, otp);		
+		return null;
+	}
+
+	public BookingDetailsDTO saveBooking(@Valid BookingDetailsDTO bookingDetailsDTO) {
+		template.opsForHash().get("otpList", bookingDetailsDTO.getBookingDetails().getMobileNumber());
+
+		if (template.opsForHash().get("otpList", bookingDetailsDTO.getBookingDetails().getMobileNumber()).equals(bookingDetailsDTO.getOtp().toString()))
+		{
+			bookingDetailsRepository.save(bookingDetailsDTO.getBookingDetails());
+			bookingDetailsDTO.setStatus("Booking Created successfully");
+		}
+		else
+		{
+			bookingDetailsDTO.setStatus("Invalid OTP, Booking not created");
+		}
+		return bookingDetailsDTO;
 	}
 	
 }
