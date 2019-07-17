@@ -5,7 +5,7 @@
 
 **Swagger URL** `http://localhost:8080/swagger-ui.html#`
 
-**Prerequisites for Local Setup** - Java, Maven and Postgresql
+**Prerequisites for Local Setup** - Java, Maven and Postgresql, redis
 
 
 How to setup locally?
