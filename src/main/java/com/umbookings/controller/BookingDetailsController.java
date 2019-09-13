@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import org.springframework.security.core.Authentication;
 /**
  * @author Shrikar Kalagi
  *
@@ -36,8 +38,9 @@ public class BookingDetailsController {
         return bookingDetailService.findById(bookingId);
     }
     
+   @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/booking")
-    public BookingDetailsDTO createBooking(@Valid @RequestBody BookingDetailsDTO bookingDetails) {
+    public BookingDetailsDTO createBooking(@Valid @RequestBody BookingDetailsDTO bookingDetails, Authentication authentication) {
     	
         return bookingDetailService.saveBooking(bookingDetails);
     }
