@@ -1,5 +1,10 @@
 package com.umbookings.service;
 
+import com.umbookings.enums.RoleName;
+import com.umbookings.model.AppRole;
+import com.umbookings.model.UserRole;
+import com.umbookings.repository.AppRoleRepository;
+import com.umbookings.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +21,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Optional;
+
 /**
  * @author Shrikar Kalagi
  *
@@ -26,6 +33,12 @@ public class AuthService {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	UserRoleRepository userRoleRepository;
+
+	@Autowired
+	AppRoleRepository appRoleRepository;
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -44,6 +57,13 @@ public class AuthService {
 		user.setMobileNumber(userSignUpDTO.getMobileNumber());
 		user.setPassword(passwordEncoder.encode(userSignUpDTO.getPassword()));
 		userRepository.save(user);
+
+		UserRole userRole = new UserRole();
+		userRole.setUserId(user.getId());
+		Optional<AppRole> appRole = appRoleRepository.findRoleByRoleName(RoleName.ROLE_NORMAL_USER);
+		userRole.setRoleId(appRole.get().getId());
+		userRoleRepository.save(userRole);
+
 		return "user added successfully";
 	}
 	public UserJwtAuthenticationResponseDTO authenticateUser(LoginRequestDTO loginRequest) {

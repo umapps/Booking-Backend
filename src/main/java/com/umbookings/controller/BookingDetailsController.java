@@ -57,15 +57,17 @@ public class BookingDetailsController {
     	bookingDetailService.delete(bookingId);
     	return ResponseEntity.ok().build();
     }
-    
+
+    @PreAuthorize("hasAnyRole('NORMAL_USER')")
     @GetMapping("/sendEmail/{emailId}")
     public String sendEmail(@PathVariable String emailId) {
     	
     	return notificationService.sendEmail(emailId, "Body", "Subject");
     }
-    
+
+    @PreAuthorize("hasAnyRole('NORMAL_USER')")
     @GetMapping("/sendSMS/{mobileNumber}")
-    public String sendSMS(@PathVariable String mobileNumber) {
+    public String sendSMS(@PathVariable String mobileNumber, Authentication authentication) {
     	
     	 return notificationService.sendSMS(mobileNumber, "OTP 0000");
     }
