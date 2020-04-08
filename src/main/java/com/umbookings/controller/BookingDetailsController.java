@@ -77,4 +77,9 @@ public class BookingDetailsController {
     	
     	 return bookingDetailService.sendOTP(mobileNumber, emailId);
     }
+
+    @GetMapping("/healthcheck")
+    public String healthcheck() {
+        return "OK";
+    }
 }
