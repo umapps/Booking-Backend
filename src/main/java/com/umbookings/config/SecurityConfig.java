@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		logger.info("Enter configure() WebSecurity");
 		web.ignoring().antMatchers("/configuration/ui", "/swagger-resources/**",
-				"/configuration/security", "/swagger-ui.html","/swagger-ui.html/**", "/webjars/**");
+				"/configuration/security", "/swagger-ui.html","/swagger-ui.html/**","/v2/api-docs", "/webjars/**");
 
 		super.configure(web);
 		logger.info("Exit configure() WebSecurity");
