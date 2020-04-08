@@ -1,5 +1,6 @@
 package com.umbookings.service;
 
+import com.umbookings.dto.request.SignUpDTO;
 import com.umbookings.enums.RoleName;
 import com.umbookings.model.AppRole;
 import com.umbookings.model.UserRole;
@@ -49,13 +50,13 @@ public class AuthService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	public String signUp( UserSignUpDTO userSignUpDTO) {
+	public String signUp( SignUpDTO signUpDTO) {
 		User user = new User();
-		user.setFirstName(userSignUpDTO.getFirstName());
-		user.setLastName(userSignUpDTO.getLastName());
-		user.setEmailId(userSignUpDTO.getEmailId().toLowerCase());
-		user.setMobileNumber(userSignUpDTO.getMobileNumber());
-		user.setPassword(passwordEncoder.encode(userSignUpDTO.getPassword()));
+		user.setFirstName(signUpDTO.getFirstName());
+		user.setLastName(signUpDTO.getLastName());
+		user.setEmailId(signUpDTO.getEmailId().toLowerCase());
+		user.setMobileNumber(signUpDTO.getMobileNumber());
+		user.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
 		userRepository.save(user);
 
 		UserRole userRole = new UserRole();

@@ -2,6 +2,7 @@ package com.umbookings.controller;
 
 import javax.validation.Valid;
 
+import com.umbookings.dto.request.SignUpDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,9 +30,10 @@ public class AuthController {
 	private AuthService authService;
 
     @PostMapping("/sign-up")
-    public String userSignUp(@Valid @RequestBody UserSignUpDTO userSignUpDTO) {
+	@ApiOperation(value = "API to add a new user", response = String.class)
+	public String userSignUp(@Valid @RequestBody SignUpDTO signUpDTO) {
     	
-    	return authService.signUp(userSignUpDTO);
+    	return authService.signUp(signUpDTO);
 
     }
     

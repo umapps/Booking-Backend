@@ -30,7 +30,7 @@ public class UserSignUpDTO {
 	
 	@NotNull
 	private String password;
-	
+
 	private Set<AppRole> roles = new HashSet<>();
 	
     public UserSignUpDTO( Long id, String firstName, String lastName, String emailId, String password, String mobileNumber){
