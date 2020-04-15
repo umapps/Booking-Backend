@@ -78,8 +78,21 @@ public class BookingDetailsController {
     	 return bookingDetailService.sendOTP(mobileNumber, emailId);
     }
 
+    //This URL is mapped to health check of EC2 from ELB
     @GetMapping("/healthcheck")
     public String healthcheck() {
-        return "OK";
+        return "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "   <body>\n" +
+                "      <p>\n" +
+                "         Visit <a href=\"https://www.uttaradimath.org\">www.uttaradimath.org</a> for more details\n" +
+                "      </p>\n" +
+                "   </body>\n" +
+                "</html>";
+    }
+
+    @GetMapping("/")
+    public String defaultResponse() {
+        return healthcheck();
     }
 }
