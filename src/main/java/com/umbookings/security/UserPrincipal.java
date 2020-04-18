@@ -57,10 +57,8 @@ public class UserPrincipal implements UserDetails {
 	}
 
 	public static UserPrincipal create(UserSignUpDTO user) {
-		LOG.info("Enter static create()");
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-		LOG.info("Exit static create()");
 		return new UserPrincipal(user.getId(), user.getFirstName(), user.getLastName(), user.getEmailId(),
 				user.getPassword(), user.getMobileNumber(), authorities);
 	}

@@ -43,10 +43,8 @@ public class JwtTokenProvider {
 	}
 
 	public boolean validateToken(String authToken) {
-		LOG.info("Enter validateToken() for authToken: {}", authToken);
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-			LOG.info("Exit validateToken()");
 			return true;
 		} catch (io.jsonwebtoken.SignatureException ex) {
 			LOG.error("Invalid JWT signature");
