@@ -6,7 +6,10 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.AmazonSNSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -20,8 +23,6 @@ import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
-import com.umbookings.config.AWSEmailConfig;
-import com.umbookings.config.AWSSMSConfig;
 
 /**
  * @author Shrikar Kalagi
@@ -30,21 +31,25 @@ import com.umbookings.config.AWSSMSConfig;
 @Service
 public class NotificationService {
 
-	
-	@Inject
-	private ConfigurableEnvironment environment;
-
-	public AWSCredentialsProvider awsCredentialsProvider;
-
 	public static AmazonSNS snsClient;
 	public static AmazonSimpleEmailService emailClient;
+	private static Map<String, MessageAttributeValue> smsAttributes;
+	private static MessageAttributeValue senderIdAttributes;
+	private static MessageAttributeValue smsTypeAttributes;
+	private static PublishRequest publishRequest;
 	private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
 
 	public String sendEmail(String emailId, String emailBody, String emailSubject) {
 		try {
 			//Using AWS Simple Email Service
 			if(emailClient == null)
-				emailClient = AWSEmailConfig.getSESConnection();
+				//Properties systemProperties = System.getProperties();
+				//emailClient = AmazonSimpleEmailServiceClientBuilder.standard()
+				//.withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(systemProperties.getProperty("aws.accessKeyId"),
+				//systemProperties.getProperty("aws.secretKey")))
+				//.withRegion(Regions.US_EAST_1).build();
+				// Below is the replacement of all the above - refer https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html
+				emailClient = AmazonSimpleEmailServiceClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
 			SendEmailRequest request = new SendEmailRequest()
 					.withDestination(new Destination().withToAddresses(emailId))
 					.withMessage(
@@ -67,25 +72,48 @@ public class NotificationService {
 
 	public String sendSMS(String mobileNumber, String text) {
 		try {
-			if(snsClient == null)
-			snsClient = AWSSMSConfig.getSNSConnection();
 			// Using AWS Simple Notification Service
+			getSMSAttributes();
 			String phoneNumber = "+91" + mobileNumber;
-			Map<String, MessageAttributeValue> smsAttributes =
-			        new HashMap<>();
-			smsAttributes.put("AWS.SNS.SMS.SenderID", new MessageAttributeValue()
-			        .withStringValue("UMAPPS") //The sender ID shown on the device - Currently not working in India
-			        .withDataType("String"));
-			smsAttributes.put("AWS.SNS.SMS.SMSType", new MessageAttributeValue()
-			        .withStringValue("Transactional") //Sets the type to Transactional.
-			        .withDataType("String"));
 			PublishResult result = snsClient
-					.publish(new PublishRequest().withMessage(text).withPhoneNumber(phoneNumber).withMessageAttributes(smsAttributes));
+					.publish(publishRequest.withMessage(text).withPhoneNumber(phoneNumber));
 			LOG.info("SMS sent successfully to {} with message id {}", mobileNumber, result);
 			return "SMS sent successfully to "+ mobileNumber +" with message id " +result;
 		} catch (Exception e) {
 			LOG.info("SMS sending failed for mobile number {} with error message {} ", mobileNumber, e);
 			return e.toString();
+		}
+	}
+
+	private void getSMSAttributes() {
+		if(snsClient == null)
+			//Properties systemProperties = System.getProperties();
+			//snsClient = AmazonSNSClient.builder().standard()
+			//.withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(systemProperties.getProperty("aws.accessKeyId"),
+			//systemProperties.getProperty("aws.secretKey")))
+			//.withRegion(Regions.US_EAST_1).build();
+			// Below is the replacement of all the above - refer https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html
+			snsClient = AmazonSNSClient.builder().withRegion(Regions.US_EAST_1).build();
+		if(senderIdAttributes == null)
+		{
+			senderIdAttributes = new MessageAttributeValue()
+					.withStringValue("UMAPPS") //The sender ID shown on the device - Currently not working in India
+					.withDataType("String");
+		}
+		if(smsTypeAttributes == null)
+		{
+			smsTypeAttributes = new MessageAttributeValue()
+					.withStringValue("Transactional") //Sets the type to Transactional.
+					.withDataType("String");
+		}
+		if(smsAttributes == null) {
+			smsAttributes = new HashMap<>();
+			smsAttributes.put("AWS.SNS.SMS.SenderID", senderIdAttributes);
+			smsAttributes.put("AWS.SNS.SMS.SMSType", smsTypeAttributes);
+		}
+		if(publishRequest == null)
+		{
+			publishRequest = new PublishRequest().withMessageAttributes(smsAttributes);
 		}
 	}
 
