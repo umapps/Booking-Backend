@@ -1,9 +1,7 @@
 package com.umbookings.config;
 
-import org.springframework.core.env.ConfigurableEnvironment;
-
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Region;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNSClient;
 /**
@@ -12,25 +10,21 @@ import com.amazonaws.services.sns.AmazonSNSClient;
  */
 public class AWSSMSConfig {
 
+	public static AmazonSNS snsClient;
+
 	// Default constructor
-	private AWSSMSConfig()
-	{
-		
+	private AWSSMSConfig() {
 	}
-	@SuppressWarnings("deprecation")
-	public static AmazonSNSClient getAWSSMSConfig(ConfigurableEnvironment environment) {
-		AmazonSNSClient snsClient;
-		if (!(environment.getProperty("aws.access.key.id").equals("")
-				&& environment.getProperty("aws.secret.access.key").equals(""))) {
-			// Provide AWS credentials. Needed only when running on environments other then EC2 instance
-			BasicAWSCredentials awsCreds = new BasicAWSCredentials(environment.getProperty("aws.access.key.id"),
-					environment.getProperty("aws.secret.access.key"));
-			snsClient = new AmazonSNSClient(awsCreds);
-		} else {
-			// No need provide AWS credentials while running in EC2 instance
-			snsClient = new AmazonSNSClient();
+
+	public static AmazonSNS getSNSConnection() {
+		try {
+			snsClient = AmazonSNSClient.builder().build();
 		}
-		snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
+		catch(Exception e)
+		{
+			snsClient = AmazonSNSClient.builder().standard().withCredentials(new AWSStaticCredentialsProvider(AWSCredsConfig.getAWSCreds()))
+					.withRegion(Regions.US_EAST_1).build();
+		}
 		return snsClient;
 	}
 }

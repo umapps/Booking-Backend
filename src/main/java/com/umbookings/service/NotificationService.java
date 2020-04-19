@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.services.sns.AmazonSNS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -15,7 +17,6 @@ import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
-import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
@@ -32,13 +33,18 @@ public class NotificationService {
 	
 	@Inject
 	private ConfigurableEnvironment environment;
-	
+
+	public AWSCredentialsProvider awsCredentialsProvider;
+
+	public static AmazonSNS snsClient;
+	public static AmazonSimpleEmailService emailClient;
 	private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
 
 	public String sendEmail(String emailId, String emailBody, String emailSubject) {
 		try {
 			//Using AWS Simple Email Service
-			AmazonSimpleEmailService emailClient = AWSEmailConfig.getAWSCredentials(environment);
+			if(emailClient == null)
+				emailClient = AWSEmailConfig.getSESConnection();
 			SendEmailRequest request = new SendEmailRequest()
 					.withDestination(new Destination().withToAddresses(emailId))
 					.withMessage(
@@ -60,15 +66,15 @@ public class NotificationService {
 	}
 
 	public String sendSMS(String mobileNumber, String text) {
-		AmazonSNSClient snsClient = null;
 		try {
+			if(snsClient == null)
+			snsClient = AWSSMSConfig.getSNSConnection();
 			// Using AWS Simple Notification Service
-			snsClient = AWSSMSConfig.getAWSSMSConfig(environment);
 			String phoneNumber = "+91" + mobileNumber;
 			Map<String, MessageAttributeValue> smsAttributes =
 			        new HashMap<>();
 			smsAttributes.put("AWS.SNS.SMS.SenderID", new MessageAttributeValue()
-			        .withStringValue("UMAPPS") //The sender ID shown on the device.
+			        .withStringValue("UMAPPS") //The sender ID shown on the device - Currently not working in India
 			        .withDataType("String"));
 			smsAttributes.put("AWS.SNS.SMS.SMSType", new MessageAttributeValue()
 			        .withStringValue("Transactional") //Sets the type to Transactional.

@@ -15,15 +15,17 @@ How to setup locally?
 3. Create User - `CREATE ROLE postgres WITH LOGIN PASSWORD 'postgres';` - If already exists proceed to next step
 4. Grant permissions - `GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;`
 5. type `exit` to exit the psql CLI
-6. Start the server locally - `mvn spring-boot:run` - Starts server at http://localhost:8080
+6. Start the server locally without AWS services (Email & SMS)  - `mvn spring-boot:run`
+7. Start the server locally with AWS services (Email & SMS) - `mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Daws.accessKeyId=********** -Daws.secretKey=*********"` (Reach out to administrators for AWS keys)
+ - Starts server at http://localhost:8080
 
+To setup in IDE, below two VM options / Arguments should be added to use AWS services (Rest all features will work fine)
+-Daws.accessKeyId=********** -Daws.secretKey=***********
 
 To build the JAR file - Run `mvn clean package` - This will create a JAR in `/target`
 
 
 To skip the tests - `mvn package -Dmaven.test.skip=true`
-
-To send the SMS/Email from APIs, `application.properties` has to be updated with AWS keys. Reach out to the maintainers.
 
 Slack channel here - `https://um-apps.slack.com`
 
