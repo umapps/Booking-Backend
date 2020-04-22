@@ -51,7 +51,7 @@ public class NotificationService {
 				// Below is the replacement of all the above - refer https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html
 				emailClient = AmazonSimpleEmailServiceClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
 			SendEmailRequest request = new SendEmailRequest()
-					.withDestination(new Destination().withToAddresses(emailId))
+					.withDestination(new Destination().withToAddresses(emailId)).withReplyToAddresses("shrikarvk@gmail.com", "shridhar41191@gmail.com")
 					.withMessage(
 							new Message()
 									.withBody(new Body()
@@ -60,9 +60,9 @@ public class NotificationService {
 											.withText(new Content().withCharset("UTF-8").withData("UMAPPS")))
 									.withSubject(
 											new Content().withCharset("UTF-8").withData(emailSubject)))
-					.withSource("shrikarvk@gmail.com");
-			emailClient.sendEmail(request);
-			LOG.info("Email sent successfully to {}", emailId);
+					.withSource("umnotify@umapps.in");
+				emailClient.sendEmail(request);
+				LOG.info("Email sent successfully to {}", emailId);
 			return "Email sent successfully to " + emailId;
 		} catch (Exception e) {
 			LOG.info("Email sending failed for email id {} with error message {} ", emailId, e);
