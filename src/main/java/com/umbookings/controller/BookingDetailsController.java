@@ -72,10 +72,17 @@ public class BookingDetailsController {
     	 return notificationService.sendSMS(mobileNumber, "OTP 0000");
     }
     
-    @GetMapping("/sendOTP")
-    public String sendSMS(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) {
-    	
-    	 return bookingDetailService.sendOTP(mobileNumber, emailId);
+    @GetMapping("/sendRegisterOTP")
+    public String sendRegisterOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) {
+
+        return bookingDetailService.sendOTP(mobileNumber, emailId, false);
+    }
+
+    @PreAuthorize("hasAnyRole('NORMAL_USER')")
+    @GetMapping("/sendBookingOTP")
+    public String sendBookingOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) {
+
+        return bookingDetailService.sendOTP(mobileNumber, emailId, true);
     }
 
     //This URL is mapped to health check of EC2 from ELB

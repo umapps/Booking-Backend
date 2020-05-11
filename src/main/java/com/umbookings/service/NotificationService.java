@@ -3,16 +3,12 @@ package com.umbookings.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Service;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.model.Body;
@@ -23,6 +19,7 @@ import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
+import com.amazonaws.services.simpleemail.model.MessageTag;
 
 /**
  * @author Shrikar Kalagi
@@ -40,10 +37,13 @@ public class NotificationService {
 	private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
 
 	public String sendEmail(String emailId, String emailBody, String emailSubject) {
+//		MessageTag messageTag = new MessageTag();
+//		messageTag.setName("Test");
+//		messageTag.setValue("TestVal");
 		try {
 			//Using AWS Simple Email Service
 			if(emailClient == null)
-				//Properties systemProperties = System.getProperties();
+
 				//emailClient = AmazonSimpleEmailServiceClientBuilder.standard()
 				//.withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(systemProperties.getProperty("aws.accessKeyId"),
 				//systemProperties.getProperty("aws.secretKey")))
@@ -61,6 +61,10 @@ public class NotificationService {
 									.withSubject(
 											new Content().withCharset("UTF-8").withData(emailSubject)))
 					.withSource("umnotify@umapps.in");
+					//Below line needed to send events (send, delivery, bounce etc) to sns topic
+					//.withConfigurationSetName("UMAPPS-Email")
+					//Below line needed to send events (send, delivery, bounce etc) to CloudWatch
+					//.withTags(messageTag);
 				emailClient.sendEmail(request);
 				LOG.info("Email sent successfully to {}", emailId);
 			return "Email sent successfully to " + emailId;
