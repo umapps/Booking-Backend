@@ -3,6 +3,7 @@ package com.umbookings.controller;
 import com.umbookings.dto.request.BookingDetailsDTO;
 import com.umbookings.model.BookingDetails;
 
+import com.umbookings.service.AuthService;
 import com.umbookings.service.BookingDetailService;
 import com.umbookings.service.NotificationService;
 
@@ -24,6 +25,9 @@ public class BookingDetailsController {
     
     @Autowired
     private BookingDetailService bookingDetailService;
+
+    @Autowired
+    private AuthService authService;
 	
 	@Autowired
 	private NotificationService notificationService;
@@ -71,35 +75,12 @@ public class BookingDetailsController {
     	
     	 return notificationService.sendSMS(mobileNumber, "OTP 0000");
     }
-    
-    @GetMapping("/sendRegisterOTP")
-    public String sendRegisterOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) {
-
-        return bookingDetailService.sendOTP(mobileNumber, emailId, false);
-    }
 
     @PreAuthorize("hasAnyRole('NORMAL_USER')")
     @GetMapping("/sendBookingOTP")
     public String sendBookingOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) {
 
-        return bookingDetailService.sendOTP(mobileNumber, emailId, true);
+        return authService.sendComminication(mobileNumber, emailId, true);
     }
 
-    //This URL is mapped to health check of EC2 from ELB
-    @GetMapping("/healthcheck")
-    public String healthcheck() {
-        return "<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "   <body>\n" +
-                "      <p>\n" +
-                "         Visit <a href=\"https://www.uttaradimath.org\">www.uttaradimath.org</a> for more details\n" +
-                "      </p>\n" +
-                "   </body>\n" +
-                "</html>";
-    }
-
-    @GetMapping("/")
-    public String defaultResponse() {
-        return healthcheck();
-    }
 }

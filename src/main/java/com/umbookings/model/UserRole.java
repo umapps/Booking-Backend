@@ -2,9 +2,13 @@ package com.umbookings.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.Data;
@@ -30,8 +34,9 @@ public class UserRole extends BaseModel{
     )
 	private Long id;
 
-	@Column(name = "USER_ID", nullable = false, updatable = false)
-	private Long userId;
+	@ManyToOne
+	@JoinColumn(name= "USER_ID", nullable = false, foreignKey = @ForeignKey(name="fk_user_id_role"))
+	private User user;
 
 	@Column(name = "ROLE_ID", nullable = false, updatable = true)
 	private Long roleId;

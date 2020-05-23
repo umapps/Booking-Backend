@@ -1,14 +1,22 @@
 package com.umbookings.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -21,7 +29,7 @@ import lombok.EqualsAndHashCode;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=true, exclude = {"roles"})
 @Entity
 //Cannot have a table name with User
 @Table(name = "UM_USER")
@@ -47,7 +55,7 @@ public class User extends BaseModel{
 	
 	@NotBlank
     @Column(name = "MOBILE_NUMBER", unique = true)
-    @Size(min = 10, max = 10)
+  //  @Size(min = 10, max = 10)
     private String mobileNumber;
 	
 	@Column(name = "DOB_DATE")
@@ -56,6 +64,7 @@ public class User extends BaseModel{
 	@Column(name = "EMAIL_IDENTIFIER", unique = true)
 	private String emailId;
 
+	@Size(min=4)
 	@JsonIgnore
 	@Column(name = "PASSWORD_TEXT")
 	private String password;
@@ -63,6 +72,10 @@ public class User extends BaseModel{
 	@Column(name = "ADDRESS")
 	private String address;
 
-	@Column(name = "PIN_CODE")
+	@Column(name = "pin_code")
 	private String pinCode;
+
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+	private Set<UserRole> roles = new HashSet<>();
 }

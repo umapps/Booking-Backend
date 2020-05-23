@@ -28,9 +28,7 @@ public class BookingDetailService {
 
 	@Autowired
 	private BookingDetailsRepository bookingDetailsRepository;
-	
-	@Autowired
-	private NotificationService notificationService;
+
 	
 	@Autowired
 	private RedisTemplate<String, Object> template;
@@ -72,53 +70,6 @@ public class BookingDetailService {
 	public BookingDetails findById(Long bookingId) {
 		return bookingDetailsRepository.findById(bookingId)
 				.orElseThrow(() -> new ResourceNotFoundException("Booking id not found - " + bookingId));
-	}
-
-	public String sendOTP(String mobileNumber, String emailId, Boolean sendSameOTPtoEMailSMS) {
-		int emailOtp = generateOtp();
-		int mobileOtp = generateOtp();
-		String returnString = "";
-		if (sendSameOTPtoEMailSMS)
-		{
-			// Make both OTP same, if we want to send same OTP to email and Mobile
-			//Same OTP needed in Booking, Different OTP needed while Registering
-			emailOtp = mobileOtp;
-
-		}
-		try {
-			if (emailId.trim().length() > 0) {
-
-				template.opsForValue().set( emailId, emailOtp );
-				template.expire( emailId, 120, TimeUnit.MINUTES );
-				String emailString = "UMAPPS > OTP is " + emailOtp;
-				notificationService.sendEmail(emailId, emailString, emailString);
-				returnString = returnString + "OTP sent successfully to " + emailId ;
-			}
-			if (mobileNumber.trim().length() > 0) {
-
-				template.opsForValue().set( mobileNumber, mobileOtp );
-				template.expire( mobileNumber, 200, TimeUnit.SECONDS );
-				String smsString = "UMAPPS > OTP is " + mobileOtp;
-				notificationService.sendSMS(mobileNumber, smsString);
-				returnString = returnString + "  and  " +mobileNumber;
-			}
-			return  returnString;
-		}
-		catch (Exception e)
-		{
-			LOG.info("Sending OTP to Mobile nbr - {} and Email id {} failed with error {}",mobileNumber, emailId, e);
-			return "OTP sending failed to" + emailId +"  and  " +mobileNumber;
-		}
-	}
-
-	private int generateOtp() {
-		Random rand = new Random();
-		int otp = rand.nextInt(9999);
-		if (otp < 1000)
-		{
-			otp = otp + 1000;
-		}
-		return otp;
 	}
 
 	public BookingDetailsDTO saveBooking(@Valid BookingDetailsDTO bookingDetailsDTO) {

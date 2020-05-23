@@ -3,6 +3,8 @@ package com.umbookings.dto.request;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.text.StyledEditorKit;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import com.umbookings.model.AppRole;
@@ -20,6 +22,7 @@ public class SignUpDTO {
 
     private String lastName;
 
+    @Email
     private String emailId;
 
     @NotNull
@@ -27,4 +30,12 @@ public class SignUpDTO {
 
     @NotNull
     private String password;
+
+    @NotNull
+    private String address;
+
+    private Integer mobileOTP;
+
+    private Integer emailOTP;
+
 }
