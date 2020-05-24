@@ -95,4 +95,10 @@ public class AuthController {
 		return authService.sendComminication(mobileNumber, emailId, false);
 	}
 
+	@GetMapping("/check-validity")
+	public String checkValidity(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) throws Exception {
+
+		return authService.checkValidity(mobileNumber, emailId);
+	}
+
 }

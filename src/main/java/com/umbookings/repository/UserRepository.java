@@ -25,4 +25,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("select ar from AppRole ar where ar.id in ( select ur.roleId from UserRole ur where ur.user.id = :id)")
 	public Set<AppRole> findRolesById(@Param("id") Long id);
 
+	@Query(value = "select exists (select 1 from um_user u where u.email_identifier=:emailId)", nativeQuery = true)
+	public boolean findByEmailId(String emailId);
+
+	@Query(value = "select exists (select 1 from um_user u where u.mobile_number=:mobileNumber)", nativeQuery = true)
+	Boolean findByMobile(String mobileNumber);
 }

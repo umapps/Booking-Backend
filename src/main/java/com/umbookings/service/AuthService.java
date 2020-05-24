@@ -211,4 +211,20 @@ public class AuthService {
 		}
 		return otp;
 	}
+
+    public String checkValidity(String mobileNumber, String emailId) throws Exception {
+        String returnString = "";
+        Boolean isEmailExists = false;
+        Boolean isMobileExists = userRepository.findByMobile(mobileNumber);
+        if(emailId.trim().length() > 0) {
+            isEmailExists = userRepository.findByEmailId(emailId);
+            if (isEmailExists)
+                returnString = returnString + " Email Id " + emailId + " already registered \n";
+        }
+        if (isMobileExists)
+            returnString = returnString + " Mobile number " + mobileNumber + " already registered ";
+        if(isEmailExists || isMobileExists)
+        throw new Exception(returnString);
+        return "Mobile "+mobileNumber + " Email " +emailId+ " not registered";
+    }
 }
