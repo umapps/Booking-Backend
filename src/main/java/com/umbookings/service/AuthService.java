@@ -1,5 +1,6 @@
 package com.umbookings.service;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.umbookings.dto.request.OTPVerifyDTO;
 import com.umbookings.dto.request.ResetPasswordDTO;
 import com.umbookings.dto.request.SignUpDTO;
@@ -11,6 +12,7 @@ import com.umbookings.repository.UserRoleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,15 +71,24 @@ public class AuthService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AuthService.class);
 
-    public String signUp(SignUpDTO signUpDTO) {
+    public String signUp(SignUpDTO signUpDTO) throws Exception {
 
+        Boolean isError = false;
+        String ErrorString = "";
         if(!otpVerify(signUpDTO.getMobileOTP(), signUpDTO.getMobileNumber()))
         {
-            return "Invalid Mobile OTP";
+            isError = true;
+            ErrorString = ErrorString+  " Invalid Mobile OTP \n";
         }
         if(signUpDTO.getEmailId().trim().length() > 0 && !otpVerify(signUpDTO.getEmailOTP(), signUpDTO.getEmailId()))
         {
-            return "Invalid Email OTP";
+            isError = true;
+            ErrorString = ErrorString +  " Invalid Email OTP ";
+        }
+        if(isError)
+        {
+            LOG.info("Invalid OTP entered for - mobile nbr {} and Email id {} ", signUpDTO.getMobileNumber(), signUpDTO.getEmailId().toLowerCase());
+            throw  new Exception(ErrorString);
         }
         User user = new User();
         user.setFirstName(signUpDTO.getFirstName());
@@ -85,14 +96,25 @@ public class AuthService {
         user.setEmailId(signUpDTO.getEmailId().toLowerCase());
         user.setMobileNumber(signUpDTO.getMobileNumber());
         user.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        }
+        catch(DataIntegrityViolationException e)
+        {
+            LOG.info("Duplicate! User Mobile nbr/ Email Id already registered with details - mobile nbr {} and Email id {} ", signUpDTO.getMobileNumber(), signUpDTO.getEmailId().toLowerCase());
+            throw  new Exception("Duplicate! User Mobile nbr/ Email Id already registered");
+        }
+        catch (Exception e)
+        {
+            LOG.info("Error while registering new user with  - mobile nbr {} and Email id {} ", signUpDTO.getMobileNumber(), signUpDTO.getEmailId().toLowerCase());
+            throw  new Exception(e.toString());
+        }
 
         UserRole userRole = new UserRole();
         userRole.setUser(user);
         Optional<AppRole> appRole = appRoleRepository.findRoleByRoleName(RoleName.ROLE_NORMAL_USER);
         userRole.setRoleId(appRole.get().getId());
         userRoleRepository.save(userRole);
-
         LOG.info("User added successfully with Mobile number - {} and Email id {} ", signUpDTO.getMobileNumber(), signUpDTO.getEmailId().toLowerCase());
         return "User added successfully with Mobile number "+signUpDTO.getMobileNumber()+ "and Email id "+ signUpDTO.getEmailId().toLowerCase();
     }

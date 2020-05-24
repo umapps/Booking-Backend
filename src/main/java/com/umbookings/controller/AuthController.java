@@ -45,7 +45,7 @@ public class AuthController {
 
     @PostMapping("/sign-up")
 	@ApiOperation(value = "API to add a new user", response = User.class)
-	public String userSignUp(@Valid @RequestBody SignUpDTO signUpDTO) {
+	public String userSignUp(@Valid @RequestBody SignUpDTO signUpDTO) throws Exception {
     	return authService.signUp(signUpDTO);
     }
     
