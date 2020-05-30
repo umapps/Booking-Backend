@@ -78,9 +78,9 @@ public class BookingDetailsController {
 
     @PreAuthorize("hasAnyRole('NORMAL_USER')")
     @GetMapping("/sendBookingOTP")
-    public String sendBookingOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) {
+    public String sendBookingOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) throws Exception {
 
-        return authService.sendComminication(mobileNumber, emailId, true);
+        return authService.sendCommunication(mobileNumber, emailId, true);
     }
 
 }
