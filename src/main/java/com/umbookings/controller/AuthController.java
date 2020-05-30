@@ -75,10 +75,9 @@ public class AuthController {
 	}
 
 	@PostMapping("/reset-password")
-	@PreAuthorize("hasAnyRole('NORMAL_USER')")
 	@ApiOperation(value = "API to reset password", response = User.class)
-	public User resetPassword(@RequestBody @Validated ResetPasswordDTO resetPassword, Authentication authentication) {
-		return authService.passwordReset(resetPassword, authentication);
+	public String resetPassword(@RequestBody @Validated ResetPasswordDTO resetPassword) throws Exception {
+		return authService.passwordReset(resetPassword);
 	}
 
 	@GetMapping("/otp-verify")

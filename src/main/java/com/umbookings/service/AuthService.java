@@ -136,12 +136,28 @@ public class AuthService {
         return jwtDTO;
     }
 
-    public User passwordReset(@Validated @RequestBody ResetPasswordDTO resetPassword, Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        User user = userRepository.findById(userPrincipal.getId()).get();
-        user.setPassword(passwordEncoder.encode(resetPassword.getPassword()));
-        userRepository.save(user);
-        return user;
+    public String passwordReset(@Validated @RequestBody ResetPasswordDTO resetPassword) throws Exception {
+
+        Optional<UserSignUpDTO> userDetails = userRepository.findUserDTOByUserId(resetPassword.getUserId());
+        if(userDetails.isPresent())
+        {
+            try {
+                User user = userRepository.findById(userDetails.get().getId()).get();
+                user.setPassword(passwordEncoder.encode(resetPassword.getPassword()));
+                userRepository.save(user);
+            }
+            catch(Exception e)
+            {
+                LOG.info("Error changing password for {}", resetPassword.getUserId());
+                throw new Exception("Error changing password for "+resetPassword.getUserId());
+            }
+            return "Password changed for user "+resetPassword.getUserId();
+        }
+        else
+        {
+            LOG.info("User details not found for {}", resetPassword.getUserId());
+            throw new Exception("User not found for "+resetPassword.getUserId());
+        }
     }
 
     public boolean otpVerify(Integer otp, String key) {
@@ -256,6 +272,6 @@ public class AuthService {
             return sendCommunication(user.get().getMobileNumber(), user.get().getEmailId(), true);
         }
         else
-            throw new Exception("User not found");
+            throw new Exception("User not found for "+userId);
     }
 }

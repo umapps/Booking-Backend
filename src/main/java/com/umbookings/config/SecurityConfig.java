@@ -82,6 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/send-fpOTP/**").permitAll()
 				.antMatchers("/check-validity/**").permitAll()
 				.antMatchers("/is-registered/**").permitAll()
+				.antMatchers("/reset-password").permitAll()
 		        .anyRequest()
 				.authenticated();
 		// Add our custom JWT security filter
