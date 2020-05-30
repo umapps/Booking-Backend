@@ -4,11 +4,13 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.umbookings.dto.request.OTPVerifyDTO;
 import com.umbookings.dto.request.ResetPasswordDTO;
 import com.umbookings.dto.request.SignUpDTO;
+import com.umbookings.dto.request.UserSignUpDTO;
 import com.umbookings.enums.RoleName;
 import com.umbookings.model.AppRole;
 import com.umbookings.model.UserRole;
 import com.umbookings.repository.AppRoleRepository;
 import com.umbookings.repository.UserRoleRepository;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,7 +167,7 @@ public class AuthService {
     }
 
 
-	public String sendComminication(String mobileNumber, String emailId, Boolean sendSameOTPtoEMailSMS) {
+	public String sendCommunication(String mobileNumber, String emailId, Boolean sendSameOTPtoEMailSMS) throws Exception {
 		int emailOtp = generateOtp();
 		int mobileOtp = generateOtp();
 		String returnString = "";
@@ -198,7 +200,7 @@ public class AuthService {
 		catch (Exception e)
 		{
 			LOG.info("Sending OTP to Mobile nbr - {} and Email id {} failed with error {}",mobileNumber, emailId, e);
-			return "OTP sending failed to " + emailId +"  and  " +mobileNumber;
+			throw new Exception( "OTP sending failed to " + emailId +"  and  " +mobileNumber);
 		}
 	}
 
@@ -215,9 +217,9 @@ public class AuthService {
     public String checkValidity(String mobileNumber, String emailId) throws Exception {
         String returnString = "";
         Boolean isEmailExists = false;
-        Boolean isMobileExists = userRepository.findByMobile(mobileNumber);
+        Boolean isMobileExists = userRepository.isExistsUserByMobile(mobileNumber);
         if(emailId.trim().length() > 0) {
-            isEmailExists = userRepository.findByEmailId(emailId);
+            isEmailExists = userRepository.isExistsUserByEmail(emailId);
             if (isEmailExists)
                 returnString = returnString + " Email Id " + emailId + " already registered \n";
         }
@@ -230,8 +232,8 @@ public class AuthService {
 
     public String isRegistered(String userId) throws Exception {
         String returnString = "";
-        Boolean isMobileExists = userRepository.findByMobile(userId);
-        Boolean isEmailExists = userRepository.findByEmailId(userId);
+        Boolean isMobileExists = userRepository.isExistsUserByMobile(userId);
+        Boolean isEmailExists = userRepository.isExistsUserByEmail(userId);
             if (isEmailExists)
                 returnString = returnString + " Email Id " + userId + " is registered \n";
         if (isMobileExists)
@@ -244,6 +246,15 @@ public class AuthService {
         {
             throw new Exception(" Mobile Number / Email Id not registered");
         }
+    }
 
+    public String sendForgotPaswordOTP(String userId) throws Exception {
+        Optional<UserSignUpDTO> user = userRepository.findUserDTOByUserId(userId);
+        if(user.isPresent())
+        {
+            return sendCommunication(user.get().getMobileNumber(), user.get().getEmailId(), true);
+        }
+        else
+            throw new Exception("User not found");
     }
 }

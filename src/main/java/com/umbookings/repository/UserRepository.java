@@ -16,9 +16,9 @@ import com.umbookings.model.AppRole;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	@Query("select new com.umbookings.dto.request.UserSignUpDTO(u.id, u.firstName, u.lastName, u.emailId, u.password, u.mobileNumber) from User u   where u.mobileNumber=:emailId or u.emailId=:emailId")
-	public Optional<UserSignUpDTO> findUserDTOByUserId(@Param("emailId") String emailId);
-	
+	@Query("select new com.umbookings.dto.request.UserSignUpDTO(u.id, u.firstName, u.lastName, u.emailId, u.password, u.mobileNumber) from User u   where u.mobileNumber=:userId or u.emailId=:userId")
+	public Optional<UserSignUpDTO> findUserDTOByUserId(@Param("userId") String userId);
+
 	@Query("select new com.umbookings.dto.request.UserSignUpDTO(u.id, u.firstName, u.lastName, u.emailId, u.password, u.mobileNumber) from User u where u.id=:id")
 	public Optional<UserSignUpDTO> findUserDTOById(@Param("id") Long id);
 	
@@ -26,8 +26,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	public Set<AppRole> findRolesById(@Param("id") Long id);
 
 	@Query(value = "select exists (select 1 from um_user u where u.email_identifier=:emailId)", nativeQuery = true)
-	public boolean findByEmailId(String emailId);
+	public boolean isExistsUserByEmail(String emailId);
 
 	@Query(value = "select exists (select 1 from um_user u where u.mobile_number=:mobileNumber)", nativeQuery = true)
-	Boolean findByMobile(String mobileNumber);
+	Boolean isExistsUserByMobile(String mobileNumber);
 }
