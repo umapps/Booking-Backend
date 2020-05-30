@@ -22,4 +22,7 @@ public class ResetPasswordDTO {
 
     @NotNull
     private String userId;
+
+    @NotNull
+    private Integer otp;
 }

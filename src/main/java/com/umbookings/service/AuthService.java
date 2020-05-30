@@ -138,6 +138,8 @@ public class AuthService {
 
     public String passwordReset(@Validated @RequestBody ResetPasswordDTO resetPassword) throws Exception {
 
+        if(!otpVerify(resetPassword.getOtp(), resetPassword.getUserId()))
+            throw new Exception("Invalid OTP ");
         Optional<UserSignUpDTO> userDetails = userRepository.findUserDTOByUserId(resetPassword.getUserId());
         if(userDetails.isPresent())
         {
