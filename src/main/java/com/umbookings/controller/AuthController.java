@@ -88,17 +88,23 @@ public class AuthController {
 		return authService.otpVerify(otpVerifyDTO.getOtp(), otpVerifyDTO.getKey());
 	}
 
-
+	@ApiOperation(value = "API to send OTP for Mobile and Email ", response = String.class)
 	@GetMapping("/sendRegisterOTP")
 	public String sendRegisterOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) {
 
 		return authService.sendComminication(mobileNumber, emailId, false);
 	}
 
+	@ApiOperation(value = "API to check if email id and mobile is registered before register action", response = String.class)
 	@GetMapping("/check-validity")
 	public String checkValidity(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) throws Exception {
 
 		return authService.checkValidity(mobileNumber, emailId);
 	}
 
+	@ApiOperation(value = "API to check if Email id / Mobile nbr is registered before sending OTP for forgot pw action", response = String.class)
+	@GetMapping("/is-registered")
+	public String checkIsRegistered(@RequestParam("userId") String userId) throws Exception {
+		return authService.isRegistered(userId);
+	}
 }

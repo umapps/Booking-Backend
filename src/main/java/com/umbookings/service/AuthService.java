@@ -227,4 +227,23 @@ public class AuthService {
         throw new Exception(returnString);
         return "Mobile "+mobileNumber + " Email " +emailId+ " not registered";
     }
+
+    public String isRegistered(String userId) throws Exception {
+        String returnString = "";
+        Boolean isMobileExists = userRepository.findByMobile(userId);
+        Boolean isEmailExists = userRepository.findByEmailId(userId);
+            if (isEmailExists)
+                returnString = returnString + " Email Id " + userId + " is registered \n";
+        if (isMobileExists)
+            returnString = returnString + " Mobile number " + userId + " is registered ";
+        if(isEmailExists || isMobileExists)
+        {
+            return returnString;
+        }
+        else
+        {
+            throw new Exception(" Mobile Number / Email Id not registered");
+        }
+
+    }
 }
