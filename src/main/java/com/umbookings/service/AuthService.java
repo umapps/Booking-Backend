@@ -195,6 +195,7 @@ public class AuthService {
 				notificationService.sendSMS(mobileNumber, smsString);
 				returnString = returnString + "  and  " +mobileNumber;
 			}
+            LOG.info(returnString);
 			return  returnString;
 		}
 		catch (Exception e)
