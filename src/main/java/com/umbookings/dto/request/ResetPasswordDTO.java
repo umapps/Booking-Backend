@@ -19,4 +19,10 @@ public class ResetPasswordDTO {
 
     @NotNull
     private String password;
+
+    @NotNull
+    private String userId;
+
+    @NotNull
+    private Integer otp;
 }

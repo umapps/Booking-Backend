@@ -75,10 +75,9 @@ public class AuthController {
 	}
 
 	@PostMapping("/reset-password")
-	@PreAuthorize("hasAnyRole('NORMAL_USER')")
 	@ApiOperation(value = "API to reset password", response = User.class)
-	public User resetPassword(@RequestBody @Validated ResetPasswordDTO resetPassword, Authentication authentication) {
-		return authService.passwordReset(resetPassword, authentication);
+	public String resetPassword(@RequestBody @Validated ResetPasswordDTO resetPassword) throws Exception {
+		return authService.passwordReset(resetPassword);
 	}
 
 	@GetMapping("/otp-verify")
@@ -92,25 +91,25 @@ public class AuthController {
 	@GetMapping("/send-rgOTP")
 	public String sendRegisterOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) throws Exception {
 
-		return authService.sendCommunication(mobileNumber, emailId, false);
+		return authService.sendCommunication(mobileNumber, emailId.toLowerCase(), false);
 	}
 
 	@ApiOperation(value = "API to send OTP for Mobile and Email for forgot password", response = String.class)
 	@GetMapping("/send-fpOTP")
 	public String sendForgotPasswordOTP(@RequestParam("userId") String userId) throws Exception {
-		return authService.sendForgotPaswordOTP(userId);
+		return authService.sendForgotPaswordOTP(userId.toLowerCase());
 	}
 
 	@ApiOperation(value = "API to check if email id and mobile is registered before register action", response = String.class)
 	@GetMapping("/check-validity")
 	public String checkValidity(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) throws Exception {
 
-		return authService.checkValidity(mobileNumber, emailId);
+		return authService.checkValidity(mobileNumber, emailId.toLowerCase());
 	}
 
 	@ApiOperation(value = "API to check if Email id / Mobile nbr is registered before sending OTP for forgot pw action", response = String.class)
 	@GetMapping("/is-registered")
 	public String checkIsRegistered(@RequestParam("userId") String userId) throws Exception {
-		return authService.isRegistered(userId);
+		return authService.isRegistered(userId.toLowerCase());
 	}
 }
