@@ -97,6 +97,7 @@ public class AuthService {
         user.setLastName(signUpDTO.getLastName());
         user.setEmailId(signUpDTO.getEmailId().toLowerCase());
         user.setMobileNumber(signUpDTO.getMobileNumber());
+        user.setCountryCode(signUpDTO.getCountryCode());
         user.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
         try {
             userRepository.save(user);
@@ -185,7 +186,7 @@ public class AuthService {
     }
 
 
-	public String sendCommunication(String mobileNumber, String emailId, Boolean sendSameOTPtoEMailSMS) throws Exception {
+	public String sendCommunication(String mobileNumber, String countryCode,  String emailId, Boolean sendSameOTPtoEMailSMS) throws Exception {
 		int emailOtp = generateOtp();
 		int mobileOtp = generateOtp();
 		String returnString = "";
@@ -210,7 +211,7 @@ public class AuthService {
 				template.opsForValue().set( mobileNumber, mobileOtp );
 				template.expire( mobileNumber, 200, TimeUnit.SECONDS );
 				String smsString = "UMAPPS > OTP is " + mobileOtp;
-				notificationService.sendSMS(mobileNumber, smsString);
+				notificationService.sendSMS(countryCode + mobileNumber, smsString);
 				returnString = returnString + "  and  " +mobileNumber;
 			}
             LOG.info(returnString);
@@ -271,7 +272,7 @@ public class AuthService {
         Optional<UserSignUpDTO> user = userRepository.findUserDTOByUserId(userId);
         if(user.isPresent())
         {
-            return sendCommunication(user.get().getMobileNumber(), user.get().getEmailId(), true);
+            return sendCommunication(user.get().getMobileNumber(), user.get().getCountryCode(), user.get().getEmailId(), true);
         }
         else
             throw new Exception("User not found for "+userId);

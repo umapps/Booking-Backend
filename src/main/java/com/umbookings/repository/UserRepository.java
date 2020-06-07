@@ -16,10 +16,10 @@ import com.umbookings.model.AppRole;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	@Query("select new com.umbookings.dto.request.UserSignUpDTO(u.id, u.firstName, u.lastName, u.emailId, u.password, u.mobileNumber) from User u   where u.mobileNumber=:userId or u.emailId=:userId")
+	@Query("select new com.umbookings.dto.request.UserSignUpDTO(u.id, u.firstName, u.lastName, u.emailId, u.password, u.mobileNumber, u.countryCode) from User u   where u.mobileNumber=:userId or u.emailId=:userId")
 	public Optional<UserSignUpDTO> findUserDTOByUserId(@Param("userId") String userId);
 
-	@Query("select new com.umbookings.dto.request.UserSignUpDTO(u.id, u.firstName, u.lastName, u.emailId, u.password, u.mobileNumber) from User u where u.id=:id")
+	@Query("select new com.umbookings.dto.request.UserSignUpDTO(u.id, u.firstName, u.lastName, u.emailId, u.password, u.mobileNumber, u.countryCode) from User u where u.id=:id")
 	public Optional<UserSignUpDTO> findUserDTOById(@Param("id") Long id);
 	
 	@Query("select ar from AppRole ar where ar.id in ( select ur.roleId from UserRole ur where ur.user.id = :id)")

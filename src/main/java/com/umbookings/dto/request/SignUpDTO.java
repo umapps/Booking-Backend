@@ -29,6 +29,9 @@ public class SignUpDTO {
     private String mobileNumber;
 
     @NotNull
+    private String countryCode;
+
+    @NotNull
     private String password;
 
     @NotNull

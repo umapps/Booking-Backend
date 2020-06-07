@@ -57,6 +57,9 @@ public class User extends BaseModel{
     @Column(name = "MOBILE_NUMBER", unique = true)
   //  @Size(min = 10, max = 10)
     private String mobileNumber;
+
+	@Column(name = "country_code")
+	private String countryCode;
 	
 	@Column(name = "DOB_DATE")
 	private Date dob;
@@ -74,6 +77,7 @@ public class User extends BaseModel{
 
 	@Column(name = "pin_code")
 	private String pinCode;
+
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)

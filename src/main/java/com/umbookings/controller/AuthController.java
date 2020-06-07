@@ -89,9 +89,9 @@ public class AuthController {
 
 	@ApiOperation(value = "API to send OTP for Mobile and Email for registration", response = String.class)
 	@GetMapping("/send-rgOTP")
-	public String sendRegisterOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) throws Exception {
+	public String sendRegisterOTP(@RequestParam("mobileNumber") String mobileNumber,@RequestParam("countryCode") String countryCode,  @RequestParam("emailId") String emailId) throws Exception {
 
-		return authService.sendCommunication(mobileNumber, emailId.toLowerCase(), false);
+		return authService.sendCommunication(mobileNumber, countryCode,  emailId.toLowerCase(), false);
 	}
 
 	@ApiOperation(value = "API to send OTP for Mobile and Email for forgot password", response = String.class)

@@ -76,11 +76,11 @@ public class BookingDetailsController {
     	 return notificationService.sendSMS(mobileNumber, "OTP 0000");
     }
 
-    @PreAuthorize("hasAnyRole('NORMAL_USER')")
-    @GetMapping("/sendBookingOTP")
-    public String sendBookingOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) throws Exception {
-
-        return authService.sendCommunication(mobileNumber, emailId, true);
-    }
+//    @PreAuthorize("hasAnyRole('NORMAL_USER')")
+//    @GetMapping("/sendBookingOTP")
+//    public String sendBookingOTP(@RequestParam("mobileNumber") String mobileNumber, @RequestParam("emailId") String emailId) throws Exception {
+//
+//        return authService.sendCommunication(mobileNumber, emailId, true);
+//    }
 
 }

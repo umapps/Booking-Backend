@@ -24,6 +24,9 @@ public class UserSignUpDTO {
 	private String lastName;
 	
 	private String emailId;
+
+	@NotNull
+	private String countryCode;
 	
 	@NotNull
 	private String mobileNumber;
@@ -33,12 +36,13 @@ public class UserSignUpDTO {
 
 	private Set<AppRole> roles = new HashSet<>();
 	
-    public UserSignUpDTO( Long id, String firstName, String lastName, String emailId, String password, String mobileNumber){
+    public UserSignUpDTO( Long id, String firstName, String lastName, String emailId, String password, String mobileNumber, String countryCode){
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailId = emailId;
         this.password = password;
         this.mobileNumber = mobileNumber;
+        this.countryCode = countryCode;
     }
 }
