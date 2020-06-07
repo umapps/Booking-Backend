@@ -78,7 +78,7 @@ public class NotificationService {
 		try {
 			// Using AWS Simple Notification Service
 			getSMSAttributes();
-			String phoneNumber = "+91" + mobileNumber;
+			String phoneNumber = mobileNumber;
 			PublishResult result = snsClient
 					.publish(publishRequest.withMessage(text).withPhoneNumber(phoneNumber));
 			LOG.info("SMS sent successfully to {} with message id {}", mobileNumber, result);
