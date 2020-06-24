@@ -1,7 +1,5 @@
 package com.umbookings.service;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import com.umbookings.dto.request.OTPVerifyDTO;
 import com.umbookings.dto.request.ResetPasswordDTO;
 import com.umbookings.dto.request.SignUpDTO;
 import com.umbookings.dto.request.UserSignUpDTO;
@@ -10,7 +8,7 @@ import com.umbookings.model.AppRole;
 import com.umbookings.model.UserRole;
 import com.umbookings.repository.AppRoleRepository;
 import com.umbookings.repository.UserRoleRepository;
-import net.bytebuddy.implementation.bytecode.Throw;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +93,7 @@ public class AuthService {
         User user = new User();
         user.setFirstName(signUpDTO.getFirstName());
         user.setLastName(signUpDTO.getLastName());
-        user.setEmailId(signUpDTO.getEmailId().toLowerCase());
+        user.setEmailId((signUpDTO.getEmailId()!= null && signUpDTO.getEmailId().trim().length() > 0 )? signUpDTO.getEmailId().toLowerCase() : null);
         user.setMobileNumber(signUpDTO.getMobileNumber());
         user.setCountryCode(signUpDTO.getCountryCode());
         user.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
@@ -118,8 +116,8 @@ public class AuthService {
         Optional<AppRole> appRole = appRoleRepository.findRoleByRoleName(RoleName.ROLE_NORMAL_USER);
         userRole.setRoleId(appRole.get().getId());
         userRoleRepository.save(userRole);
-        LOG.info("User added successfully with Mobile number - {} and Email id {} ", signUpDTO.getMobileNumber(), signUpDTO.getEmailId().toLowerCase());
-        return "User added successfully with Mobile number "+signUpDTO.getMobileNumber()+ "and Email id "+ signUpDTO.getEmailId().toLowerCase();
+        LOG.info("User added successfully with Mobile number - {} and Email id {} ", user.getMobileNumber(), user.getEmailId());
+        return "User added successfully with Mobile number "+user.getMobileNumber()+ " and Email id "+ user.getEmailId();
     }
 
     public UserJwtAuthenticationResponseDTO authenticateUser(LoginRequestDTO loginRequest) {
