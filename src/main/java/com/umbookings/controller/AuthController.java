@@ -91,7 +91,7 @@ public class AuthController {
 	@GetMapping("/send-rgOTP")
 	public String sendRegisterOTP(@RequestParam("mobileNumber") String mobileNumber,@RequestParam("countryCode") String countryCode,  @RequestParam("emailId") String emailId) throws Exception {
 
-		return authService.sendCommunication(mobileNumber, countryCode,  emailId.toLowerCase(), false);
+		return authService.sendCommunication(mobileNumber, countryCode,  emailId, false);
 	}
 
 	@ApiOperation(value = "API to send OTP for Mobile and Email for forgot password", response = String.class)

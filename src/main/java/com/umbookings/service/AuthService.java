@@ -196,12 +196,12 @@ public class AuthService {
 
 		}
 		try {
-			if (emailId.trim().length() > 0) {
+			if (emailId!=null && emailId.trim().length() > 0) {
 
-				template.opsForValue().set( emailId, emailOtp );
-				template.expire( emailId, 5, TimeUnit.MINUTES );
+				template.opsForValue().set( emailId.toLowerCase(), emailOtp );
+				template.expire( emailId.toLowerCase(), 5, TimeUnit.MINUTES );
 				String emailString = "UMAPPS > OTP is " + emailOtp;
-				notificationService.sendEmail(emailId, emailString, emailString);
+				notificationService.sendEmail(emailId.toLowerCase(), emailString, emailString);
 				returnString = returnString + "OTP sent successfully to " + emailId ;
 			}
 			if (mobileNumber.trim().length() > 0) {
