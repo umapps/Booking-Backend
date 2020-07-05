@@ -218,7 +218,8 @@ public class AuthService {
 		catch (Exception e)
 		{
 			LOG.info("Sending OTP to Mobile nbr - {} and Email id {} failed with error {}",mobileNumber, emailId, e);
-			throw new Exception( "OTP sending failed to email " + emailId +"  and  mobile nbr " +mobileNumber);
+			throw new Exception(e.getMessage());
+			//throw new Exception( "OTP sending failed to email " + emailId +"  and  mobile nbr " +mobileNumber);
 		}
 	}
 
