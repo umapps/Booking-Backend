@@ -71,9 +71,9 @@ public class BookingDetailsController {
 
     @PreAuthorize("hasAnyRole('NORMAL_USER')")
     @GetMapping("/sendSMS/{mobileNumber}")
-    public String sendSMS(@PathVariable String mobileNumber, Authentication authentication) {
+    public void sendSMS(@PathVariable String mobileNumber, Authentication authentication) throws Exception {
     	
-    	 return notificationService.sendSMS(mobileNumber, "OTP 0000");
+        notificationService.sendSMS(mobileNumber, "OTP 0000");
     }
 
 //    @PreAuthorize("hasAnyRole('NORMAL_USER')")

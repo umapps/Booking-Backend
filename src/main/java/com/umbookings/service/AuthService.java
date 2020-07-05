@@ -80,14 +80,14 @@ public class AuthService {
             isError = true;
             ErrorString = ErrorString+  " Invalid Mobile OTP \n";
         }
-        if(signUpDTO.getEmailId().trim().length() > 0 && !otpVerify(signUpDTO.getEmailOTP(), signUpDTO.getEmailId()))
+        if(signUpDTO.getEmailId()!=null && signUpDTO.getEmailId().trim().length() > 0 && !otpVerify(signUpDTO.getEmailOTP(), signUpDTO.getEmailId().trim().toLowerCase()))
         {
             isError = true;
             ErrorString = ErrorString +  " Invalid Email OTP ";
         }
         if(isError)
         {
-            LOG.info("Invalid OTP entered for - mobile nbr {} and Email id {} ", signUpDTO.getMobileNumber(), signUpDTO.getEmailId().toLowerCase());
+            LOG.info("Invalid OTP entered for - mobile nbr {} and Email id {} ", signUpDTO.getMobileNumber(), signUpDTO.getEmailId()!=null ? signUpDTO.getEmailId().toLowerCase() : "");
             throw  new Exception(ErrorString);
         }
         User user = new User();
@@ -198,8 +198,8 @@ public class AuthService {
 		try {
 			if (emailId!=null && emailId.trim().length() > 0) {
 
-				template.opsForValue().set( emailId.toLowerCase(), emailOtp );
-				template.expire( emailId.toLowerCase(), 5, TimeUnit.MINUTES );
+				template.opsForValue().set( emailId.trim().toLowerCase(), emailOtp );
+				template.expire( emailId.trim().toLowerCase(), 5, TimeUnit.MINUTES );
 				String emailString = "UMAPPS > OTP is " + emailOtp;
 				notificationService.sendEmail(emailId.toLowerCase(), emailString, emailString);
 				returnString = returnString + "OTP sent successfully to " + emailId ;
@@ -218,7 +218,7 @@ public class AuthService {
 		catch (Exception e)
 		{
 			LOG.info("Sending OTP to Mobile nbr - {} and Email id {} failed with error {}",mobileNumber, emailId, e);
-			throw new Exception( "OTP sending failed to " + emailId +"  and  " +mobileNumber);
+			throw new Exception( "OTP sending failed to email " + emailId +"  and  mobile nbr " +mobileNumber);
 		}
 	}
 
