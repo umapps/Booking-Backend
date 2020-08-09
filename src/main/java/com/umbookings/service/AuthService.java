@@ -208,7 +208,7 @@ public class AuthService {
 
 				template.opsForValue().set( mobileNumber, mobileOtp );
 				template.expire( mobileNumber, 200, TimeUnit.SECONDS );
-				String smsString = "UMAPPS > OTP is " + mobileOtp;
+				String smsString = "UM-INFO: " + mobileOtp + " is your one time password for verification";
 				notificationService.sendSMS(countryCode + mobileNumber, smsString);
 				returnString = returnString + "  and  " +mobileNumber;
 			}

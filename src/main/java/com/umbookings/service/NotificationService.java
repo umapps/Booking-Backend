@@ -100,10 +100,11 @@ public class NotificationService {
             String apiKey = "apikey=" + props.get("textLocal.key");
             String message = "&message=" + text;
             String numbers = "&numbers=" + mobileNumber;
+            String sender = "&sender=" + "JYNASD";
 
             // Send data
             HttpURLConnection conn = (HttpURLConnection) new URL("https://api.textlocal.in/send/?").openConnection();
-            String data = apiKey + numbers + message;
+            String data = apiKey + numbers + message + sender;
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
