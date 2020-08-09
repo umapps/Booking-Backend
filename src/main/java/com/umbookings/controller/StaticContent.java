@@ -43,7 +43,7 @@ public class StaticContent {
                 "    <body>\n" +
                 "    <strong>Privacy Policy</strong> <p>\n" +
                 "                  UMAPPS built the UMApplication app as\n" +
-                "                  a Free app. This SERVICE is provided by\n" +
+                "                  a Free app for Jayanidhi ASD Pvt, Ltd - Athani, Belgaum, KA. This SERVICE is provided by\n" +
                 "                  UMAPPS at no cost and is intended for use as\n" +
                 "                  is.\n" +
                 "                </p> <p>\n" +
