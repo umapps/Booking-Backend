@@ -153,7 +153,7 @@ public class NotificationService {
             snsClient = AmazonSNSClient.builder().withRegion(Regions.US_EAST_1).build();
         if (senderIdAttributes == null) {
             senderIdAttributes = new MessageAttributeValue()
-                    .withStringValue("UMAPPS") //The sender ID shown on the device - Currently not working in India
+                    .withStringValue("UMINFO") //The sender ID shown on the device - Currently not working in India
                     .withDataType("String");
         }
         if (smsTypeAttributes == null) {
