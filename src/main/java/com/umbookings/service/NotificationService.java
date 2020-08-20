@@ -94,45 +94,45 @@ public class NotificationService {
             getSMSAttributes();
             //--------- TextLocal-------
             // if param store doesn't have the value, through exception
-            if (props.get("textLocal.key") == null) {
-                throw new Exception("textLocal API key is not passed in the VM arguments");
-            }
-            String apiKey = "apikey=" + props.get("textLocal.key");
-            String message = "&message=" + text;
-            String numbers = "&numbers=" + mobileNumber;
-            String sender = "&sender=" + "UMINFO";
-
-            // Send data
-            HttpURLConnection conn = (HttpURLConnection) new URL("https://api.textlocal.in/send/?").openConnection();
-            String data = apiKey + numbers + message + sender;
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
-            conn.getOutputStream().write(data.getBytes("UTF-8"));
-            final BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            final StringBuffer stringBuffer = new StringBuffer();
-            String line;
-            while ((line = rd.readLine()) != null) {
-                stringBuffer.append(line);
-            }
-            rd.close();
-            LOG.info(stringBuffer.toString());
-            Map<String, Object> resp = new JSONObject(stringBuffer.toString()).toMap();
-            if ((resp.get("status")).equals("failure"))
-            {
-                ArrayList errors = (ArrayList)resp.get("errors");
-                HashMap<String, String> error = (HashMap<String, String>) errors.get(0);
-                LOG.info("Error sending message {}", error.get("message"));
-                throw new Exception("Error sending message - "+error.get("message"));
-            }
+//            if (props.get("textLocal.key") == null) {
+//                throw new Exception("textLocal API key is not passed in the VM arguments");
+//            }
+//            String apiKey = "apikey=" + props.get("textLocal.key");
+//            String message = "&message=" + text;
+//            String numbers = "&numbers=" + mobileNumber;
+//            String sender = "&sender=" + "UMINFO";
+//
+//            // Send data
+//            HttpURLConnection conn = (HttpURLConnection) new URL("https://api.textlocal.in/send/?").openConnection();
+//            String data = apiKey + numbers + message + sender;
+//            conn.setDoOutput(true);
+//            conn.setRequestMethod("POST");
+//            conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
+//            conn.getOutputStream().write(data.getBytes("UTF-8"));
+//            final BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//            final StringBuffer stringBuffer = new StringBuffer();
+//            String line;
+//            while ((line = rd.readLine()) != null) {
+//                stringBuffer.append(line);
+//            }
+//            rd.close();
+//            LOG.info(stringBuffer.toString());
+//            Map<String, Object> resp = new JSONObject(stringBuffer.toString()).toMap();
+//            if ((resp.get("status")).equals("failure"))
+//            {
+//                ArrayList errors = (ArrayList)resp.get("errors");
+//                HashMap<String, String> error = (HashMap<String, String>) errors.get(0);
+//                LOG.info("Error sending message {}", error.get("message"));
+//                throw new Exception("Error sending message - "+error.get("message"));
+//            }
             //-------- TextLocal End ---------------
 
             //------------- AWS SNS-----------
 
-//			String phoneNumber = mobileNumber;
-//			PublishResult result = snsClient
-//					.publish(publishRequest.withMessage(text).withPhoneNumber(phoneNumber));
-//			LOG.info("SMS sent successfully to {} with message id {}", mobileNumber, result);
+			String phoneNumber = mobileNumber;
+			PublishResult result = snsClient
+					.publish(publishRequest.withMessage(text).withPhoneNumber(phoneNumber));
+			LOG.info("SMS sent successfully to {} with message id {}", mobileNumber, result);
 
             //------------- AWS SNS end-----------
             LOG.info("SMS sent successfully to " + mobileNumber + " with content " + text);
