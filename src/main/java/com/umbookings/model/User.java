@@ -2,6 +2,7 @@ package com.umbookings.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -78,6 +79,8 @@ public class User extends BaseModel{
 	@Column(name = "pin_code")
 	private String pinCode;
 
+	@Column(name = "device_token")
+	private String deviceToken;
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)

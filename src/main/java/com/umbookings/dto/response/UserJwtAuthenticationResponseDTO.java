@@ -17,6 +17,7 @@ public class UserJwtAuthenticationResponseDTO {
     private Long id;
     private String emailId;
     private String mobileNumber;
+    private String deviceToken;
     private Collection<? extends GrantedAuthority> roles;
     
     public UserJwtAuthenticationResponseDTO(Long id, String emailId, String mobileNumber)

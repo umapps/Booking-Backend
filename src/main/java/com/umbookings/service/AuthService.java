@@ -9,6 +9,7 @@ import com.umbookings.model.UserRole;
 import com.umbookings.repository.AppRoleRepository;
 import com.umbookings.repository.UserRoleRepository;
 
+import io.netty.util.internal.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,7 @@ public class AuthService {
         user.setEmailId((signUpDTO.getEmailId()!= null && signUpDTO.getEmailId().trim().length() > 0 )? signUpDTO.getEmailId().toLowerCase() : null);
         user.setMobileNumber(signUpDTO.getMobileNumber());
         user.setCountryCode(signUpDTO.getCountryCode());
+        user.setDeviceToken(signUpDTO.getDeviceToken());
         user.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
         try {
             userRepository.save(user);
@@ -132,6 +134,7 @@ public class AuthService {
         jwtDTO.setEmailId(userPrincipal.getEmailId());
         jwtDTO.setTokenType("Bearer");
         jwtDTO.setAccessToken(tokenProvider.generateToken(authentication));
+        jwtDTO.setDeviceToken(userPrincipal.getDeviceToken());
         return jwtDTO;
     }
 

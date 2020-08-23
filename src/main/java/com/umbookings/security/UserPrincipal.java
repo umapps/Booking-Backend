@@ -36,10 +36,12 @@ public class UserPrincipal implements UserDetails {
 
 	private String mobileNumber;
 
+	private String deviceToken;
+
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public UserPrincipal(Long id, String firstName, String lastName, String emailId, String password,
-			String mobileNumber, Collection<? extends GrantedAuthority> authorities) {
+			String mobileNumber, String deviceToken, Collection<? extends GrantedAuthority> authorities) {
 
 		this.id = id;
 
@@ -54,13 +56,15 @@ public class UserPrincipal implements UserDetails {
 		this.authorities = authorities;
 
 		this.mobileNumber = mobileNumber;
+
+		this.deviceToken = deviceToken;
 	}
 
 	public static UserPrincipal create(UserSignUpDTO user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 		return new UserPrincipal(user.getId(), user.getFirstName(), user.getLastName(), user.getEmailId(),
-				user.getPassword(), user.getMobileNumber(), authorities);
+				user.getPassword(), user.getMobileNumber(), user.getDeviceToken(), authorities);
 	}
 
 	public Long getId() {
@@ -81,6 +85,10 @@ public class UserPrincipal implements UserDetails {
 
 	public String getMobileNumber() {
 		return mobileNumber;
+	}
+
+	public String getDeviceToken() {
+		return deviceToken;
 	}
 
 	public String getEmailId() {

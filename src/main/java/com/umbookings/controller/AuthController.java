@@ -112,4 +112,15 @@ public class AuthController {
 	public String checkIsRegistered(@RequestParam("userId") String userId) throws Exception {
 		return authService.isRegistered(userId.toLowerCase());
 	}
+
+	@ApiOperation(value = "API to update expo device token", response = String.class)
+	@PostMapping("/update_token")
+	@PreAuthorize("hasAnyRole('NORMAL_USER')")
+	public String updateToken(@RequestBody String updateToken, Authentication authentication) throws Exception {
+		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+		Optional<User> user = userRepository.findById(userPrincipal.getId());
+		user.get().setDeviceToken(updateToken);
+		userRepository.save(user.get());
+		return "Device token updated successfully";
+	}
 }

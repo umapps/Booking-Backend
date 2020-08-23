@@ -1,13 +1,7 @@
 package com.umbookings.dto.request;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.text.StyledEditorKit;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-
-import com.umbookings.model.AppRole;
 
 import lombok.Data;
 
@@ -17,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class SignUpDTO {
+
     @NotNull
     private String firstName;
 
@@ -40,5 +35,7 @@ public class SignUpDTO {
     private Integer mobileOTP;
 
     private Integer emailOTP;
+
+    private String deviceToken;
 
 }
