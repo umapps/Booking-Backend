@@ -9,6 +9,7 @@ import com.umbookings.expo.utils.PushError;
 import com.umbookings.expo.utils.PushTicket;
 import com.umbookings.expo.utils.PushTicketResponse;
 import com.umbookings.expo.utils.Status;
+import io.netty.util.internal.StringUtil;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -25,16 +26,20 @@ public class ExpoService {
         List<Message> messages = new ArrayList<>();
         for(String deviceToken : DeviceTokens)
         {
-            String[] individualDeviceTokens = deviceToken.split(",");
-            for (String token: individualDeviceTokens) {
-                if (ExpoPushClient.isExpoPushToken(token)) {
-                Message message = new Message.Builder()
-                        .to(token)
-                        .title(subject)
-                        .body(text)
-                        .build();
-                messages.add(message);
-            }
+            if(!StringUtil.isNullOrEmpty(deviceToken)) {
+                String[] individualDeviceTokens = deviceToken.split(",");
+                for (String token : individualDeviceTokens) {
+                    if(!StringUtil.isNullOrEmpty(deviceToken)) {
+                        if (ExpoPushClient.isExpoPushToken(token)) {
+                            Message message = new Message.Builder()
+                                    .to(token)
+                                    .title(subject)
+                                    .body(text)
+                                    .build();
+                            messages.add(message);
+                        }
+                    }
+                }
             }
         }
         List<List<Message>> chunks = ExpoPushClient.chunkItems(messages);
