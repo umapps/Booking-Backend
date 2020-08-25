@@ -25,6 +25,28 @@ public class StaticContent {
                 "</html>";
     }
 
+    @GetMapping("/chat")
+    public String onlineChat() {
+        return "<!-- Start of  Zendesk Widget script -->\n" +
+                "<script id=\"ze-snippet\"\n" +
+                "        src=\"https://static.zdassets.com/ekr/snippet.js?key=a3a748f5-47f1-47c2-a26a-ffc6a926684e\"></script>\n" +
+                "<!-- End of  Zendesk Widget script -->\n" +
+                "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "    <!-- Start of  Zendesk Widget script -->\n" +
+                "    <script id=\"ze-snippet\"\n" +
+                "            src=\"https://static.zdassets.com/ekr/snippet.js?key=a3a748f5-47f1-47c2-a26a-ffc6a926684e\"></script>\n" +
+                "    <!-- End of  Zendesk Widget script -->\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<p>\n" +
+                "    Welcome to Online Chat Services of UMApps\n" +
+                "</p>\n" +
+                "</body>\n" +
+                "</html>";
+    }
+
     @GetMapping("/")
     public String defaultResponse() {
         return healthcheck();
