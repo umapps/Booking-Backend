@@ -11,14 +11,16 @@ import javax.validation.constraints.NotNull;
 @Data
 public class PublishNotificationDTO {
 
-    private String subject;
+    private String subject="";
 
     @NotNull
-    private String text;
+    private String text="";
 
     private Boolean isEmail = false;
 
     private Boolean isSms = false;
 
     private Boolean isPush = false;
+
+    private Boolean isNotification = true;
 }
