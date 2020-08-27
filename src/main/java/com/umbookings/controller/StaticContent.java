@@ -27,17 +27,23 @@ public class StaticContent {
 
     @GetMapping("/chat")
     public String onlineChat() {
-        return "<!-- Start of  Zendesk Widget script -->\n" +
-                "<script id=\"ze-snippet\"\n" +
-                "        src=\"https://static.zdassets.com/ekr/snippet.js?key=a3a748f5-47f1-47c2-a26a-ffc6a926684e\"></script>\n" +
-                "<!-- End of  Zendesk Widget script -->\n" +
+        return "\n" +
                 "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
-                "    <!-- Start of  Zendesk Widget script -->\n" +
-                "    <script id=\"ze-snippet\"\n" +
-                "            src=\"https://static.zdassets.com/ekr/snippet.js?key=a3a748f5-47f1-47c2-a26a-ffc6a926684e\"></script>\n" +
-                "    <!-- End of  Zendesk Widget script -->\n" +
+                "    <!--Start of Tawk.to Script-->\n" +
+                "    <script type=\"text/javascript\">\n" +
+                "        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();\n" +
+                "        (function(){\n" +
+                "        var s1=document.createElement(\"script\"),s0=document.getElementsByTagName(\"script\")[0];\n" +
+                "        s1.async=true;\n" +
+                "        s1.src='https://embed.tawk.to/5f44a5b61e7ade5df443a843/default';\n" +
+                "        s1.charset='UTF-8';\n" +
+                "        s1.setAttribute('crossorigin','*');\n" +
+                "        s0.parentNode.insertBefore(s1,s0);\n" +
+                "        })();\n" +
+                "    </script>\n" +
+                "    <!--End of Tawk.to Script-->\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "<p>\n" +
