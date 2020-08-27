@@ -10,6 +10,8 @@ import com.umbookings.expo.utils.PushTicket;
 import com.umbookings.expo.utils.PushTicketResponse;
 import com.umbookings.expo.utils.Status;
 import io.netty.util.internal.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ import java.util.List;
 @Service
 public class ExpoService {
 
-
+    private static final Logger LOG = LoggerFactory.getLogger(ExpoService.class);
     public void sendPushNotifications(List<String> DeviceTokens, String subject, String text) {
 
 
@@ -52,7 +54,7 @@ public class ExpoService {
                 // (usually just one)
                 if (errors != null) {
                     for (ExpoError error : errors) {
-                        // Handle the errors
+                        LOG.info("Sending push notification failed with error {} and error message {} ",error.getCode(), error.getMessage() );
                     }
                 }
                 // If there are errors that affect individual messages but not the entire request,
@@ -83,7 +85,7 @@ public class ExpoService {
                 }
             } catch (IOException e) {
                 // Handle a network error here
-                System.out.println(e.getMessage());
+                LOG.info("Sending push notification failed with error  {} ", e.getMessage());
             }
         }
     }

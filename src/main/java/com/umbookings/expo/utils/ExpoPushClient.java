@@ -75,7 +75,7 @@ public class ExpoPushClient {
         } else {
             String eBody = response.errorBody().string();
             PushTicketResponse eResponse = new GsonBuilder().create().fromJson(eBody, PushTicketResponse.class);
-            return response.body();
+            return eResponse;
         }
     }
 
