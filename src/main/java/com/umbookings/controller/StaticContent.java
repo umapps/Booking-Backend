@@ -19,7 +19,7 @@ public class StaticContent {
                 "<html>\n" +
                 "   <body>\n" +
                 "      <p>\n" +
-                "         Visit <a href=\"https://www.jayanidhiasd.com/\">https://www.jayanidhiasd.com/</a> for more details\n" +
+                "         Visit <a href=\"https://www.uttaradimath.org\">www.uttaradimath.org</a> for more for more details\n" +
                 "      </p>\n" +
                 "   </body>\n" +
                 "</html>";
@@ -71,7 +71,7 @@ public class StaticContent {
                 "    <body>\n" +
                 "    <strong>Privacy Policy</strong> <p>\n" +
                 "                  UMAPPS built the UMApplication app as\n" +
-                "                  a Free app for Jayanidhi ASD Pvt, Ltd - Athani, Belgaum, KA. This SERVICE is provided by\n" +
+                "                  a Free app. This SERVICE is provided by\n" +
                 "                  UMAPPS at no cost and is intended for use as\n" +
                 "                  is.\n" +
                 "                </p> <p>\n" +
