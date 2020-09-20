@@ -36,7 +36,9 @@ public class AdminService {
         for(String emailId : allEmailIds)
         {
             try {
-                notificationService.sendEmail(emailId, text, emailSubject);
+                if(!emailId.isEmpty()) {
+                    notificationService.sendEmail(emailId, text, emailSubject);
+                }
             } catch (Exception e) {
                 LOG.info("Email sending failed for  - emailId  {} with text {} ", emailId, text);
 
