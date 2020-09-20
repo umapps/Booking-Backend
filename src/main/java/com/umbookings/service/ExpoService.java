@@ -5,6 +5,7 @@ package com.umbookings.service;
 import com.umbookings.expo.utils.ExpoError;
 import com.umbookings.expo.utils.ExpoPushClient;
 import com.umbookings.expo.utils.Message;
+import com.umbookings.expo.utils.Priority;
 import com.umbookings.expo.utils.PushError;
 import com.umbookings.expo.utils.PushTicket;
 import com.umbookings.expo.utils.PushTicketResponse;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,9 @@ public class ExpoService {
                                     .to(token)
                                     .title(subject)
                                     .body(text)
+                                    .channelId("UMnotify")
+                                    .priority(Priority.HIGH)
+                                    .ttl(Duration.ofDays(7))
                                     .build();
                             messages.add(message);
                         }
