@@ -27,7 +27,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('NORMAL_USER')")
     @ApiOperation(value = "API to get user notifications", response = List.class)
     public List<NotificationDTO> getNotifications(Authentication authentication) {
-        List<NotificationDTO> notifications = notificationRepository.getNotifications(PageRequest.of(0, 5));
+        List<NotificationDTO> notifications = notificationRepository.getNotifications(PageRequest.of(0, 50));
         return notifications;
     }
 }
