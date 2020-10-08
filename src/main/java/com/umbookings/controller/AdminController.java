@@ -41,17 +41,17 @@ public class AdminController {
                 || (publishNotificationDTO.getIsPush() && publishNotificationDTO.getSubject().trim().length() == 0)) {
             throw new Exception("Subject cannot be empty when Email / Push is selected");
         }
-        // if (publishNotificationDTO.getIsEmail()) {
-        //     adminService.publishEmailNotifications(publishNotificationDTO.getSubject(), publishNotificationDTO.getText());
-        // }
+        if (publishNotificationDTO.getIsEmail()) {
+            adminService.publishEmailNotifications(publishNotificationDTO.getSubject(), publishNotificationDTO.getText());
+        }
 
-        // if (publishNotificationDTO.getIsPush()) {
-        //     adminService.publishPushNotifications(publishNotificationDTO.getSubject(), publishNotificationDTO.getText());
-        // }
+        if (publishNotificationDTO.getIsPush()) {
+            adminService.publishPushNotifications(publishNotificationDTO.getSubject(), publishNotificationDTO.getText());
+        }
 
-        // if (publishNotificationDTO.getIsSms()) {
-        //     adminService.publishSMSNotifications(publishNotificationDTO.getText());
-        // }
+        if (publishNotificationDTO.getIsSms()) {
+            adminService.publishSMSNotifications(publishNotificationDTO.getText());
+        }
 
         if (publishNotificationDTO.getIsNotification()) {
             Notification notification = new Notification();
