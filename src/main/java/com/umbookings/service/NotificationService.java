@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
+import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest;
+import com.amazonaws.services.simplesystemsmanagement.model.GetParameterResult;
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersRequest;
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersResult;
 import com.amazonaws.services.sns.AmazonSNS;
@@ -91,55 +93,73 @@ public class NotificationService {
     }
 
     public void sendSMS(String mobileNumber, String text) throws Exception {
+        //props.put("textLocal.key", "");
         try {
             getSMSAttributes();
             //--------- TextLocal-------
-            // if param store doesn't have the value, through exception
-//            if (props.get("textLocal.key") == null) {
-//                throw new Exception("textLocal API key is not passed in the VM arguments");
-//            }
-//            String apiKey = "apikey=" + props.get("textLocal.key");
-//            String message = "&message=" + text;
-//            String numbers = "&numbers=" + mobileNumber;
-//            String sender = "&sender=" + "UMINFO";
-//
-//            // Send data
-//            HttpURLConnection conn = (HttpURLConnection) new URL("https://api.textlocal.in/send/?").openConnection();
-//            String data = apiKey + numbers + message + sender;
-//            conn.setDoOutput(true);
-//            conn.setRequestMethod("POST");
-//            conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
-//            conn.getOutputStream().write(data.getBytes("UTF-8"));
-//            final BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//            final StringBuffer stringBuffer = new StringBuffer();
-//            String line;
-//            while ((line = rd.readLine()) != null) {
-//                stringBuffer.append(line);
-//            }
-//            rd.close();
-//            LOG.info(stringBuffer.toString());
-//            Map<String, Object> resp = new JSONObject(stringBuffer.toString()).toMap();
-//            if ((resp.get("status")).equals("failure"))
-//            {
-//                ArrayList errors = (ArrayList)resp.get("errors");
-//                HashMap<String, String> error = (HashMap<String, String>) errors.get(0);
-//                LOG.info("Error sending message {}", error.get("message"));
-//                throw new Exception("Error sending message - "+error.get("message"));
-//            }
+            //useTextLocal(mobileNumber, text);
             //-------- TextLocal End ---------------
 
             //------------- AWS SNS-----------
-
-			String phoneNumber = mobileNumber;
-			PublishResult result = snsClient
-					.publish(publishRequest.withMessage(text).withPhoneNumber(phoneNumber));
-			LOG.info("SMS sent successfully to {} with message id {}", mobileNumber, result);
-
+            useSNS(mobileNumber, text);
             //------------- AWS SNS end-----------
             LOG.info("SMS sent successfully to " + mobileNumber + " with content " + text);
         } catch (Exception e) {
             LOG.info("SMS sending failed for mobile number {} with error message {} ", mobileNumber, e);
             throw e;
+        }
+    }
+
+    private void useSNS(String mobileNumber, String text) {
+        PublishResult result = snsClient
+                .publish(publishRequest.withMessage(text).withPhoneNumber(mobileNumber));
+        LOG.info("SMS sent successfully to {} with message id {}", mobileNumber, result);
+    }
+
+    private void useTextLocal(String mobileNumber, String text) throws Exception {
+        // if param store doesn't have the value, through exception
+
+        if (paramStoreClient == null) {
+            // Get values from Param store
+            paramStoreClient = AWSSimpleSystemsManagementClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
+        }
+        if(props.get("textLocal.key") == null) {
+            GetParameterRequest paramRequest = new GetParameterRequest().withName("/umapps/sms/textlocal/textLocal.key").withWithDecryption(true);
+            GetParameterResult parameter = paramStoreClient.getParameter(paramRequest);
+            parameter.getParameter();
+            props.put(parameter.getParameter().getName(), parameter.getParameter().getValue());
+        }
+
+        if (props.get("textLocal.key") == null) {
+            throw new Exception("textLocal API key not available");
+        }
+        String apiKey = "apikey=" + props.get("textLocal.key");
+        String message = "&message=" + text;
+        String numbers = "&numbers=" + mobileNumber;
+        String sender = "&sender=" + "UMINFO";
+
+        // Send data
+        HttpURLConnection conn = (HttpURLConnection) new URL("https://api.textlocal.in/send/?").openConnection();
+        String data = apiKey + numbers + message + sender;
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
+        conn.getOutputStream().write(data.getBytes("UTF-8"));
+        final BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        final StringBuffer stringBuffer = new StringBuffer();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            stringBuffer.append(line);
+        }
+        rd.close();
+        LOG.info(stringBuffer.toString());
+        Map<String, Object> resp = new JSONObject(stringBuffer.toString()).toMap();
+        if ((resp.get("status")).equals("failure"))
+        {
+            ArrayList errors = (ArrayList)resp.get("errors");
+            HashMap<String, String> error = (HashMap<String, String>) errors.get(0);
+            LOG.info("Error sending message {}", error.get("message"));
+            throw new Exception("Error sending message - "+error.get("message"));
         }
     }
 
@@ -170,15 +190,7 @@ public class NotificationService {
         if (publishRequest == null) {
             publishRequest = new PublishRequest().withMessageAttributes(smsAttributes);
         }
-        if (paramStoreClient == null) {
-            // Get values from Param store
-            paramStoreClient = AWSSimpleSystemsManagementClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
-            }
-        if(props.get("textLocal.key") == null) {
-            GetParametersRequest paramRequest = new GetParametersRequest().withNames("textLocal.key").withWithDecryption(true);
-            GetParametersResult parameters = paramStoreClient.getParameters(paramRequest);
-            parameters.getParameters().forEach(parameter -> props.put(parameter.getName(), parameter.getValue()));
-        }
+
     }
 
 }

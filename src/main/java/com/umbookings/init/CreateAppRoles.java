@@ -6,6 +6,9 @@ package com.umbookings.init;
 import com.umbookings.enums.RoleName;
 import com.umbookings.model.AppRole;
 import com.umbookings.repository.AppRoleRepository;
+import com.umbookings.security.JwtAuthenticationEntryPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,6 +21,8 @@ public class CreateAppRoles implements ApplicationRunner {
 
     @Autowired
     AppRoleRepository appRoleRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(CreateAppRoles.class);
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -39,5 +44,6 @@ public class CreateAppRoles implements ApplicationRunner {
            adminUser.setDescription("Admin user");
            appRoleRepository.save(adminUser);
        }
+        logger.info("server started successfully");
     }
 }
