@@ -41,7 +41,7 @@ public class DataSourceOverride {
                 isCloudEnvironment = false;
             }
         }
-        if (!isCloudEnvironment) {
+        if (isCloudEnvironment) {
             Map<String, String> props = new HashMap<>();
             AWSSimpleSystemsManagement paramStoreClient;
             // Get values from Param store
@@ -55,7 +55,6 @@ public class DataSourceOverride {
             dataSourceBuilder.password(props.get("/umapps/db/password"));
             return dataSourceBuilder.build();
         } else {
-
             DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
             dataSourceBuilder.url(url);
             dataSourceBuilder.username(userName);
