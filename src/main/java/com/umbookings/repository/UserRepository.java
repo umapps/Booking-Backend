@@ -22,14 +22,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("select new com.umbookings.dto.request.UserSignUpDTO(u.id, u.firstName, u.lastName, u.emailId, u.password, u.mobileNumber, u.countryCode, u.deviceToken) from User u where u.id=:id")
 	public Optional<UserSignUpDTO> findUserDTOById(@Param("id") Long id);
-	
+
 	@Query("select ar from AppRole ar where ar.id in ( select ur.roleId from UserRole ur where ur.user.id = :id)")
 	public Set<AppRole> findRolesById(@Param("id") Long id);
 
-	@Query(value = "select exists (select 1 from um_user u where u.email_identifier=:emailId)", nativeQuery = true)
+	@Query(value = "select case when exists (select 1 from um_user u where u.email_identifier=:emailId) then 'true' else 'false' end from dual", nativeQuery = true)
 	public boolean isExistsUserByEmail(String emailId);
 
-	@Query(value = "select exists (select 1 from um_user u where u.mobile_number=:mobileNumber)", nativeQuery = true)
+	@Query(value = "select case when exists (select 1 from um_user u where u.mobile_number=:mobileNumber) then 'true' else 'false' end from dual", nativeQuery = true)
 	Boolean isExistsUserByMobile(String mobileNumber);
 
 	@Query(value = "select CONCAT(u.country_code,u.mobile_number) as mobile_number FROM um_user u where 1=1", nativeQuery = true)
