@@ -42,9 +42,9 @@ public class DataSourceOverride {
             }
         }
         if (isCloudEnvironment) {
+            // if running on EC2, get values from Param store
             Map<String, String> props = new HashMap<>();
             AWSSimpleSystemsManagement paramStoreClient;
-            // Get values from Param store
             paramStoreClient = AWSSimpleSystemsManagementClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
             GetParametersRequest paramRequest = new GetParametersRequest().withNames("/umapps/db/url", "/umapps/db/username", "/umapps/db/password").withWithDecryption(false);
             GetParametersResult parameters = paramStoreClient.getParameters(paramRequest);
