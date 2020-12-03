@@ -19,7 +19,7 @@ public class StaticContent {
                 "<html>\n" +
                 "   <body>\n" +
                 "      <p>\n" +
-                "         Visit <a href=\"https://www.uttaradimath.org\">www.uttaradimath.org</a> for more for more details\n" +
+                "         Visit <a href=\"https://www.jayanidhiasd.com/\">https://www.jayanidhiasd.com/</a> for more for more details\n" +
                 "      </p>\n" +
                 "   </body>\n" +
                 "</html>";
