@@ -87,7 +87,7 @@ public class SriSudhaController {
                                     sriSudhaUserDetailsDTO.getAddress().toUpperCase(), sriSudhaUserDetailsDTO.getDistrict().toUpperCase(), sriSudhaUserDetailsDTO.getPincode(),user.get().getId().toString());
                             isSuccess.set(true);
                             try {
-                                notificationService.sendSMS(mobileNbr, "UM-INFO: Dear " + sriSudhaUserDetailsDTO.getName().toUpperCase()+",  address details updated successfully for SriSudha id "+ sriSudhaUserDetailsDTO.getAddressId());
+                                notificationService.sendSMS("91"+mobileNbr, "UM-INFO: Dear " + sriSudhaUserDetailsDTO.getName().toUpperCase()+",  address details updated successfully for SriSudha id "+ sriSudhaUserDetailsDTO.getAddressId());
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
