@@ -3,6 +3,7 @@ package com.umbookings.srisudha.controller;
 import com.umbookings.model.User;
 import com.umbookings.repository.UserRepository;
 import com.umbookings.security.UserPrincipal;
+import com.umbookings.service.NotificationService;
 import com.umbookings.srisudha.DTO.SriSudhaUserDetailsDTO;
 import com.umbookings.srisudha.repository.SriSudhaRepository;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,9 @@ public class SriSudhaController {
 
     @Autowired
     SriSudhaRepository sriSudhaRepository;
+
+    @Autowired
+    NotificationService notificationService;
 
     @ApiOperation(value = "API to get SriSudha user details", response = List.class)
     @GetMapping("/get_ss_details")
@@ -82,6 +86,11 @@ public class SriSudhaController {
                             sriSudhaRepository.updateUserDetails(sriSudhaUserDetailsDTO.getAddressId(), sriSudhaUserDetailsDTO.getName().toUpperCase(),
                                     sriSudhaUserDetailsDTO.getAddress().toUpperCase(), sriSudhaUserDetailsDTO.getDistrict().toUpperCase(), sriSudhaUserDetailsDTO.getPincode(),user.get().getId().toString());
                             isSuccess.set(true);
+                            try {
+                                notificationService.sendSMS(mobileNbr, "UM-INFO: Dear " + sriSudhaUserDetailsDTO.getName().toUpperCase()+",  address details updated successfully for SriSudha id "+ sriSudhaUserDetailsDTO.getAddressId());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
             );
