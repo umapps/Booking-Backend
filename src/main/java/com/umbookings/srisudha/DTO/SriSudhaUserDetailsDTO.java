@@ -17,14 +17,18 @@ public class SriSudhaUserDetailsDTO {
 	@NotNull
 	private Integer addressId;
 
+	@NotNull
 	private String name;
 
 	private Date endDate;
 
+	@NotNull
 	private String address;
 
+	@NotNull
 	private String district;
 
+	@NotNull
 	@Size(min = 6, max = 6)
 	private String pincode;
 
