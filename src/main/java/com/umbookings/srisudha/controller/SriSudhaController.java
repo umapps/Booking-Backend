@@ -79,8 +79,8 @@ public class SriSudhaController {
                     {
                         if(sriSudhaUserDetailsDTO.getAddressId().equals(((Object[]) userDetail)[0]))
                         {
-                            sriSudhaRepository.updateUserDetails(sriSudhaUserDetailsDTO.getAddressId(), sriSudhaUserDetailsDTO.getName(),
-                                    sriSudhaUserDetailsDTO.getAddress(), sriSudhaUserDetailsDTO.getDistrict(), sriSudhaUserDetailsDTO.getPincode(),user.get().getId().toString());
+                            sriSudhaRepository.updateUserDetails(sriSudhaUserDetailsDTO.getAddressId(), sriSudhaUserDetailsDTO.getName().toUpperCase(),
+                                    sriSudhaUserDetailsDTO.getAddress().toUpperCase(), sriSudhaUserDetailsDTO.getDistrict().toUpperCase(), sriSudhaUserDetailsDTO.getPincode(),user.get().getId().toString());
                             isSuccess.set(true);
                         }
                     }
